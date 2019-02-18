@@ -15,10 +15,7 @@ for (i = 0; i < coll.length; i++) {
   });
 }
 });*/
-//adding a category
-$(document).ready(function(){
-    
-});
+reloadCategory();
 
 function hideFieldCategory(){
     //var inputCategory = document.getElementById('fieldCategory');
@@ -30,10 +27,7 @@ function hideFieldCategory(){
 
 function addCategory(){
     var inputCategory = document.getElementById('fieldCategory');
-
-    
     inputCategory.innerHTML="<input id='category' placeholder='Add Category...' class='form-control' type='text'/>";
-
     inputCategory.addEventListener("keyup",function(event){
         if(event.keyCode == 13){
             var category=$("#category").val();
@@ -51,12 +45,17 @@ function addCategory(){
                     }   
                     });
         }
-            inputCategory.innerHTML="";
+        $("#categories").html("");
+        reloadCategory();
+        $('#sidenav').load('#sidenav>*');
+        inputCategory.innerHTML="";
+
            
         }
     });
 }
 //dispaly list of category
+function reloadCategory(){
 $(document).ready(function(){
     var dataString="&displayCategory=";
                     $.ajax({
@@ -76,7 +75,7 @@ $(document).ready(function(){
                                 "<div class='btn-group' role='group'><button id='btnGroupDrop1' type='button' class='btn btn-secondary dropdown-toggle w-100' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'></button>"+
                                 "<div class='dropdown-menu' aria-labelledby='btnGroupDrop1'>"+
                                 "<button class='dropdown-item' href='#' value='"+categoryName+"' onclick='addDocument(this);'><i class='fa fa-plus-square-o'></i>"+
-                                " Add Document</buttom><button class='dropdown-item' href='#'><i class='fa fa-trash-o'>"+
+                                " Add Document</buttom><button value='"+categoryName+"' class='dropdown-item' href='#' onclick='removeCategory(this);'><i class='fa fa-trash-o'>"+
                                 "</i> Remove Category</button></div></div></div>");
                                 i++;
                     });
@@ -84,7 +83,7 @@ $(document).ready(function(){
                 
                     });    
 });
-
+}
 /*$(document).ready(function(){
     $('#category').onclick(function(){
         var clickCategory = document.getElementsByClassName('category');
@@ -114,7 +113,12 @@ $(document).ready(function(){
                 };
                 reader.readAsDataURL(input.files[0]);
                 }
-            }
+        }
+        function removeCategory(category){
+            var category = category.value;
+           alert(category);
+        }
+
                         
 /*    });
 });*/

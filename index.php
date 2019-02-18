@@ -15,8 +15,10 @@
     </div>
     <div class="col-lg-7 centercon">
         <div class="contentmargin"></div>
+        <div class="maincontent"></div>
+        <div class="filecontent"></div>
 
-        <table class="table table-hover w-100">
+<!--      <table class="table table-hover w-100">
         <thead class="fileheader">
             <tr>
             <th scope="col">Name</th>
@@ -44,7 +46,7 @@
             <td>@twitter</td>
             </tr>
         </tbody>
-        </table>
+        </table>-->
         </div>
     <div class="col-lg-3 rightnav">
         sdjsdhfj

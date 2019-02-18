@@ -24,6 +24,7 @@ body{
 .centercon{
     padding-right: 0;
     padding-left: 0;
+    color:black;
 }
 .contentmargin{
     margin-top:30px;
@@ -39,6 +40,21 @@ body{
 }
 .dropdown-item{
     color:gray;
+}
+.filecontent{
+    box-shadow: 0 0 7px lightgray;
+    margin: 20px;
+    padding: 10px;
+    transition: opacity 300ms ease-in-out 1s;
+}
+.file{
+    margin-top:30px;
+}
+.fileInput{
+    margin-top:10px;
+}
+.adddocument{
+    float:right;
 }
 /*collapsible*/
 

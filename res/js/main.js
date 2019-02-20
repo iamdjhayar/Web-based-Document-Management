@@ -57,7 +57,7 @@ function addCategory(){
 //dispaly list of category
 function reloadCategory(){
 $(document).ready(function(){
-    var dataString="&displayCategory=";
+    var dataString="displayCategory=";
                     $.ajax({
                         type: "POST",
                         url: "main.php",
@@ -75,8 +75,12 @@ $(document).ready(function(){
                                 "<div class='btn-group' role='group'><button id='btnGroupDrop1' type='button' class='btn btn-secondary dropdown-toggle w-100' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'></button>"+
                                 "<div class='dropdown-menu' aria-labelledby='btnGroupDrop1'>"+
                                 "<button class='dropdown-item' href='#' value='"+categoryName+"' onclick='addDocument(this);'><i class='fa fa-plus-square-o'></i>"+
-                                " Add Document</buttom><button value='"+categoryName+"' class='dropdown-item' href='#' onclick='removeCategory(this);'><i class='fa fa-trash-o'>"+
-                                "</i> Remove Category</button></div></div></div>");
+                                " Add Document</button><button value='"+categoryName+"' class='dropdown-item' href='#' onclick='removeCategory(this);'><i class='fa fa-trash-o'>"+
+                                "</i> Remove Category</button>"+
+                                "<button class='dropdown-item' href='#' value='"+categoryName+"' ><i class='fa fa-eye-slash'></i>"+
+                                " Change View</button>"+
+                                "<button class='dropdown-item' href='#' value='"+categoryName+"' ><i class='fa fa-edit'></i>"+
+                                " Remane</button></div></div></div>");
                                 i++;
                     });
                 }
@@ -96,11 +100,12 @@ $(document).ready(function(){
         function addDocument(obj){
             var category=obj.value;
             $('.filecontent').html("<i class='fa fa-folder-o'></i>"+category+"/..."+
-            "<button class='btn btn-success adddocument'>Add Document</button>"+
-            "<form class='file'><div class='row'><div class='col-lg-4'><input type='text' class='form-control' placeholder='Document Name'></div>"+
-            "<div class='col-lg-4'><input type='text' class='form-control' placeholder='Designation'></div>"+
-            "<div class='col-lg-4'><input type='text' class='form-control' placeholder='Additional Details'></div></div>"+
-            "<input type='file' class='form-control fileInput' placeholder='Additional Details' onchange='readURL(this);'><hr>"+
+            "<input type='hidden' id='category' value='"+category+"'/>"+
+            "<button class='btn btn-success adddocument' onclick='submitDocument();'>Add Document</button>"+
+            "<form class='file' id='document' enctype='multipart/form-data'><div class='row'><div class='col-lg-4'><input type='text' class='form-control' id='docuName' placeholder='Document Name'></div>"+
+            "<div class='col-lg-4'><input type='text' id='designate' class='form-control' placeholder='Designation'></div>"+
+            "<div class='col-lg-4'><input type='text' id='addInfo' class='form-control' placeholder='Additional Details'></div></div>"+
+            "<input type='file' class='form-control fileInput' id='document' placeholder='Additional Details' onchange='readURL(this);'><hr>"+
             " <img id='previewDocument' src='#' width='100%' alt='Preview Document'/></form>");
 
         }
@@ -117,6 +122,36 @@ $(document).ready(function(){
         function removeCategory(category){
             var category = category.value;
            alert(category);
+        }
+        function submitDocument(){
+            /*var documentName=$("#docuName").val();
+            var designation=$("#designate").val();
+            var addInfo=$("#addInfo").val();
+            var document=$("#document").val();
+            var category=$("#category").val();
+
+            var dataString="docuName="+documentName+"&designate="+
+                designation+"&addInfo="+addInfo+"&category="+category+"&document="+document+
+                "&addDocument=";*/
+            var data=$('#document')[0];
+            var formData= new FormData(data);
+            
+            console.log(formData);
+            /*if ($.trim(documentName).length > 0 && (document.length) > 0) {
+                $.ajax({
+                    type: "POST",
+                    url: "main.php",
+                    data: dataString,
+                    crossDomain: true,
+                    cache: false,
+                    dataType:'json',
+                    success: function(data) {
+                        console.log(data);
+                }   
+                });
+    }*/
+
+            //console.log(documentName+designation+addInfo+document+category);
         }
 
                         

@@ -35,4 +35,23 @@
             echo json_encode($data);
             
     }
+    if(isset($_POST['addDocument'])){
+
+        $namef=$_POST['docuName'];
+        $uploader='admin';
+        $category=$_POST['category'];
+        $addinfo=$_POST['addInfo'];
+        $designate=$_POST['designate'];
+        $document=$_POST['document'];
+            $file = rand(1000,100000)."-".$_FILES['file']['name'];
+			$file_loc = $_FILES['file']['tmp_name'];
+			$new_file_name = strtolower($file);
+			$final_file=str_replace(' ','-',$new_file_name);
+			$folder="uploads/";
+			move_uploaded_file($file_loc,$folder.$final_file);
+
+        $query=mysqli_query($conn,"INSERT INTO files(namef,uploader,category,
+            addinfo,designate,location) VALUES ('$namef','$uploader','$category','$addinfo','$designate',
+            '$final_file')") or die(mysqli_error($conn));
+    }
 ?>

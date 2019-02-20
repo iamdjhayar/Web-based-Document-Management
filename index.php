@@ -16,7 +16,8 @@
     <div class="col-lg-7 centercon">
         <div class="contentmargin"></div>
         <div class="maincontent"></div>
-        <div class="filecontent"></div>
+        <div class="filecontent"><h1>Document Management</h1></div>
+        
 
 <!--      <table class="table table-hover w-100">
         <thead class="fileheader">

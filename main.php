@@ -52,4 +52,19 @@
             addinfo,designate,location) VALUES ('$namef','$uploader','$category','$addinfo','$designate',
             '$final_file')") or die(mysqli_error($conn));
     }
+    if(isset($_POST['login'])){
+        $username=$_POST['username'];
+        $password=$_POST['password'];
+
+        $query=mysqli_query($conn,"SELECT * FROM user WHERE username='$username' AND password='$password'") or die(mysql_error());
+        $matched=mysqli_num_rows($query) or die(mysqli_error($conn));
+        if ($Matched>0){
+            $_SESSION['userdata']=mysqli_fetch_assoc($query)or die(mysqli_error($conn));
+            header("location:home.php");
+            }
+            else{
+                header("location:index.php");
+            }
+
+    }
 ?>

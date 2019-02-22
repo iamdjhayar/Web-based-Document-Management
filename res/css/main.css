@@ -56,6 +56,20 @@ body{
 .adddocument{
     float:right;
 }
+.login{
+    background-color: lightgray;
+}
+.divlogin{
+    background-color: white;
+    margin-top:120px;
+    padding:30px;
+    box-shadow: 0 0 15px #333;
+}
+.img-fluid{
+    width: 150px;
+    height: 150px;
+    margin-bottom: 30;
+}
 /*collapsible*/
 
 .collapsible {

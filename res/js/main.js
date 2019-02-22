@@ -144,3 +144,25 @@ $(document).ready(function(){
                });
             }));
         });
+
+        function loginFunction(){
+            var userName=$('#username').val();
+            var passWord=$('#password').val();
+            var dataString="username=" + userName + "&password=" + passWord + "&login=" ;
+            if($.trim(userName).length > 0)
+            {
+                $.ajax({
+                    type: "POST",
+                    url: "main.php",
+                    data: dataString,
+                    crossDomain: true,
+                    cache: false,
+                    dataType:'json',
+                    success:function(data){
+
+                    }
+
+                });
+
+            }
+        }

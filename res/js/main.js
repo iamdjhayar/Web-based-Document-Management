@@ -80,7 +80,7 @@ $(document).ready(function(){
                                 "<button class='dropdown-item' href='#' value='"+categoryName+"' ><i class='fa fa-eye-slash'></i>"+
                                 " Change View</button>"+
                                 "<button class='dropdown-item' href='#' value='"+categoryName+"' ><i class='fa fa-edit'></i>"+
-                                " Remane</button></div></div></div>");
+                                " Rename</button></div></div></div>");
                                 i++;
                     });
                 }
@@ -100,12 +100,13 @@ $(document).ready(function(){
         function addDocument(obj){
             var category=obj.value;
             $('.filecontent').html("<i class='fa fa-folder-o'></i>"+category+"/..."+
-            "<input type='hidden' id='category' value='"+category+"'/>"+
-            "<button class='btn btn-success adddocument' onclick='submitDocument();'>Add Document</button>"+
-            "<form class='file' id='document' enctype='multipart/form-data'><div class='row'><div class='col-lg-4'><input type='text' class='form-control' id='docuName' placeholder='Document Name'></div>"+
-            "<div class='col-lg-4'><input type='text' id='designate' class='form-control' placeholder='Designation'></div>"+
-            "<div class='col-lg-4'><input type='text' id='addInfo' class='form-control' placeholder='Additional Details'></div></div>"+
-            "<input type='file' class='form-control fileInput' id='document' placeholder='Additional Details' onchange='readURL(this);'><hr>"+
+            "<form class='file' method='POST' id='document' enctype='multipart/form-data'>"+
+            "<input type='hidden' name='category' value='"+category+"'/>"+
+            "<button class='btn btn-success adddocument' id='submitForm' type='submit'>Add Document</button>"+
+            "<div class='row'><div class='col-lg-4'><input type='text' class='form-control' name='docuName' placeholder='Document Name'></div>"+
+            "<div class='col-lg-4'><input type='text' name='designate' class='form-control' placeholder='Designation'></div>"+
+            "<div class='col-lg-4'><input type='text' name='addInfo' class='form-control' placeholder='Additional Details'></div></div>"+
+            "<input type='file' class='form-control fileInput' name='document' placeholder='Additional Details' onchange='readURL(this);'><hr>"+
             " <img id='previewDocument' src='#' width='100%' alt='Preview Document'/></form>");
 
         }
@@ -119,41 +120,27 @@ $(document).ready(function(){
                 reader.readAsDataURL(input.files[0]);
                 }
         }
+
         function removeCategory(category){
             var category = category.value;
            alert(category);
         }
-        function submitDocument(){
-            /*var documentName=$("#docuName").val();
-            var designation=$("#designate").val();
-            var addInfo=$("#addInfo").val();
-            var document=$("#document").val();
-            var category=$("#category").val();
 
-            var dataString="docuName="+documentName+"&designate="+
-                designation+"&addInfo="+addInfo+"&category="+category+"&document="+document+
-                "&addDocument=";*/
-            var data=$('#document')[0];
-            var formData= new FormData(data);
-            
-            console.log(formData);
-            /*if ($.trim(documentName).length > 0 && (document.length) > 0) {
+        $(document).ready(function (e) {
+            $("#submitForm").on('submit',(function(e) {
+                e.preventDefault();
                 $.ajax({
-                    type: "POST",
-                    url: "main.php",
-                    data: dataString,
-                    crossDomain: true,
-                    cache: false,
-                    dataType:'json',
-                    success: function(data) {
-                        console.log(data);
-                }   
-                });
-    }*/
+                    url: "/main.php",   	// Url to which the request is send
+                    type: "POST",      				// Type of request to be send, called as method
+                    data:  new FormData(this), 		// Data sent to server, a set of key/value pairs representing form fields and values 
+                    contentType: false,       		// The content type used when sending data to the server. Default is: "application/x-www-form-urlencoded"
+                    cache: false,					// To unable request pages to be cached
+                    processData:false,  			// To send DOMDocument or non processed data file it is set to false (i.e. data should not be in the form of string)
+                    success: function(data)  		// A function to be called if request succeeds
+                    {
 
-            //console.log(documentName+designation+addInfo+document+category);
-        }
-
-                        
-/*    });
-});*/
+                            
+                    }	        
+               });
+            }));
+        });

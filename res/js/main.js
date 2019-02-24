@@ -59,7 +59,7 @@ function reloadCategory(){
 $(document).ready(function(){
     var dataString="displayCategory=";
                     $.ajax({
-                        type: "POST",
+                        type: "GET",
                         url: "main.php",
                         data: dataString,
                         crossDomain: true,
@@ -88,25 +88,60 @@ $(document).ready(function(){
                     });    
 });
 }
-/*$(document).ready(function(){
-    $('#category').onclick(function(){
-        var clickCategory = document.getElementsByClassName('category');
-*/
         function displayFiles(obj){
            var idCategory = obj.value;
            console.log(idCategory);
-           $('.maincontent').html();
+           $('.centercon').html('');
+           $('.centercon').html("<table class='table table-hover w-100'>"+
+           "<thead class='fileheader'>"+
+               "<tr>"+
+               "<th scope='col'>Name</th>"+
+               "<th scope='col'>Type</th>"+
+               "<th scope='col'>Size</th>"+
+               "<th scope='col'>Date</th>"+
+               "</tr>"+
+           "</thead>"+
+           "<tbody id='tbbody'>"+    
+           "</tbody>"+
+           "</table>");
+           var dataString="category="+idCategory+"&getFiles=";
+           console.log(dataString);
+           if($.trim(idCategory).length>0){
+               $.ajax({
+                   url: "main.php",
+                   type: "GET",
+                   data: dataString,
+                   contentType: false,       		// The content type used when sending data to the server. Default is: "application/x-www-form-urlencoded"
+                    cache: false,	
+                    dataType: "json",			// To unable request pages to be cached
+                    processData:false,  			// To send DOMDocument or non processed data file it is set to false (i.e. data should not be in the form of string)
+                    success: function(data){ 
+                        $.each(data, function(i, element) {
+                            var fileName=element.namef;
+                            var date=element.datestamp;
+                            $('#tbbody').append("<tr>"+
+                            "<th scope='row'>"+fileName+"</th>"+
+                            "<td>Mark</td>"+
+                            "<td>Otto</td>"+
+                            "<td>"+ date +"</td>"+
+                            "</tr>");	 
+                        }); 
+                }
+
+
+               });
+           }
         }
         function addDocument(obj){
             var category=obj.value;
             $('.filecontent').html("<i class='fa fa-folder-o'></i>"+category+"/..."+
             "<form class='file' method='POST' id='document' enctype='multipart/form-data'>"+
             "<input type='hidden' name='category' value='"+category+"'/>"+
-            "<button class='btn btn-success adddocument' id='submitForm' type='submit'>Add Document</button>"+
-            "<div class='row'><div class='col-lg-4'><input type='text' class='form-control' name='docuName' placeholder='Document Name'></div>"+
-            "<div class='col-lg-4'><input type='text' name='designate' class='form-control' placeholder='Designation'></div>"+
-            "<div class='col-lg-4'><input type='text' name='addInfo' class='form-control' placeholder='Additional Details'></div></div>"+
-            "<input type='file' class='form-control fileInput' name='document' placeholder='Additional Details' onchange='readURL(this);'><hr>"+
+            "<button class='btn btn-success adddocument' type='submit' id='submitForm'>Add Document</button>"+
+            "<div class='row'><div class='col-lg-4'><input type='text' class='form-control' name='docuName' placeholder='Document Name' required></div>"+
+            "<div class='col-lg-4'><input type='text' name='designate' class='form-control' placeholder='Designation' required></div>"+
+            "<div class='col-lg-4'><input type='text' name='addInfo' class='form-control' placeholder='Additional Details' required></div></div>"+
+            "<input type='file' class='form-control fileInput' name='document' placeholder='Additional Details' onchange='readURL(this);' required><hr>"+
             " <img id='previewDocument' src='#' width='100%' alt='Preview Document'/></form>");
 
         }
@@ -126,9 +161,11 @@ $(document).ready(function(){
            alert(category);
         }
 
-        $(document).ready(function (e) {
-            $("#submitForm").on('submit',(function(e) {
-                e.preventDefault();
+        function submitForm(){
+            alert('success');
+        }
+
+        $("#submitForm").on('submit',(function(e) { 
                 $.ajax({
                     url: "/main.php",   	// Url to which the request is send
                     type: "POST",      				// Type of request to be send, called as method
@@ -137,18 +174,18 @@ $(document).ready(function(){
                     cache: false,					// To unable request pages to be cached
                     processData:false,  			// To send DOMDocument or non processed data file it is set to false (i.e. data should not be in the form of string)
                     success: function(data)  		// A function to be called if request succeeds
-                    {
-
-                            
+                    {     
+                        alert('sucess');  
                     }	        
                });
+               e.preventDefault();
             }));
-        });
 
         function loginFunction(){
-            var userName=$('#username').val();
-            var passWord=$('#password').val();
-            var dataString="username=" + userName + "&password=" + passWord + "&login=" ;
+            var userName=$("#username").val();
+            var passWord=$("#password").val();
+            var dataString="username=" + userName + "&password=" + passWord + "&login=";
+            
             if($.trim(userName).length > 0)
             {
                 $.ajax({
@@ -159,6 +196,17 @@ $(document).ready(function(){
                     cache: false,
                     dataType:'json',
                     success:function(data){
+                        $.each(data, function(i, element) {
+                            var msg=element.msg;
+
+                            if(msg=='success'){
+                                console.log('successfull!!');
+                                window.location.href="home.php";
+                            }
+                            else{
+                                alert('failed!!!')
+                            }
+                        });
 
                     }
 

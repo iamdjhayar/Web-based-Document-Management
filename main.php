@@ -25,7 +25,9 @@
         }
 
     }
-    if(isset($_POST['displayCategory'])){
+    print_r($_SESSION['userdata']);
+
+    if(isset($_GET['displayCategory'])){
         
         $query=mysqli_query($conn,"SELECT * FROM category") or die(mysqli_error($conn));
         $data=array();
@@ -53,18 +55,35 @@
             '$final_file')") or die(mysqli_error($conn));
     }
     if(isset($_POST['login'])){
+        $msg=array();
         $username=$_POST['username'];
         $password=$_POST['password'];
 
-        $query=mysqli_query($conn,"SELECT * FROM user WHERE username='$username' AND password='$password'") or die(mysql_error());
-        $matched=mysqli_num_rows($query) or die(mysqli_error($conn));
-        if ($Matched>0){
-            $_SESSION['userdata']=mysqli_fetch_assoc($query)or die(mysqli_error($conn));
-            header("location:home.php");
-            }
-            else{
-                header("location:index.php");
-            }
+        $query=mysqli_query($conn,"SELECT * FROM `user` WHERE username='$username' AND password='$password'");
 
+        $matched=mysqli_num_rows($query) or die(mysqli_error($conn));
+        if ($matched>0){
+            $_SESSION['userdata']=mysqli_fetch_assoc($query) or die(mysqli_error($conn));
+            $msg['msg']='success';
+
+            echo json_encode($msg);
+            }
+        else{
+                $msg['msg']='failed';
+
+                echo json_encode($msg);     
+            }
+           
+    }
+    if(isset($_GET['getFiles'])){ 
+            
+        $category=$_GET['category'];
+
+        $query=mysqli_query($conn,"SELECT * FROM files WHERE category='$category'");
+        $files=array();
+        while($row=mysqli_fetch_object($query)){
+            $files[]=$row;
+            }
+            echo json_encode($files);
     }
 ?>

@@ -37,7 +37,7 @@
             echo json_encode($data);
             
     }
-    if(isset($_POST['document'])){
+    if(isset($_POST['docuName'])){
     
         $namef=$_POST['docuName'];
         $uploader='admin';
@@ -54,7 +54,6 @@
         $query=mysqli_query($conn,"INSERT INTO files(namef,uploader,category,
             addinfo,designate,location) VALUES ('$namef','$uploader','$category','$addinfo','$designate',
             '$final_file')");
-            echo('thank you!!');
     }
     if(isset($_GET['login'])){
         $msg=array();

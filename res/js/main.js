@@ -117,21 +117,21 @@ $(document).ready(function(){
            
             $('.centercon').html("<div class='maincontent'></div>"+
             "<div class='filecontent'><h1></h1></div>");
-            $('.filecontent').append("<i class='fa fa-folder-o'></i>"+category+"/..."+
-            "<form class='file' action='' id='submitForm' method='post' enctype='multipart/form-data'>"+
-            "<button class='btn btn-success adddocument' type='submit'>Add Document</button>"+
+            $('.filecontent').html("<i class='fa fa-folder-o'></i>"+category+"/..."+
+            "<form class='file' method='POST' id='document' enctype='multipart/form-data'>"+
             "<input type='hidden' name='category' value='"+category+"'/>"+
-            "<div class='row'><div class='col-lg-4'><input type='text' class='form-control' name='docuName' placeholder='Document Name' required></div>"+
-            "<div class='col-lg-4'><input type='text' name='designate' class='form-control' placeholder='Designation' required></div>"+
-            "<div class='col-lg-4'><input type='text' name='addInfo' class='form-control' placeholder='Additional Details' required></div></div>"+
-            "<input type='file' class='form-control fileInput' name='document' placeholder='Additional Details' onchange='readURL(this);' required><hr>"+
+            "<button class='btn btn-success adddocument' id='submitForm' type='submit'>Add Document</button>"+
+            "<div class='row'><div class='col-lg-4'><input type='text' class='form-control' name='docuName' placeholder='Document Name'></div>"+
+            "<div class='col-lg-4'><input type='text' name='designate' class='form-control' placeholder='Designation'></div>"+
+            "<div class='col-lg-4'><input type='text' name='addInfo' class='form-control' placeholder='Additional Details'></div></div>"+
+            "<input type='file' class='form-control fileInput' name='document' placeholder='Additional Details' onchange='readURL(this);'><hr>"+
             " <img id='previewDocument' src='#' width='100%' alt='Preview Document'/></form>");
         }
         $(document).ready(function(e){ 
             $("#submitForm").on('submit',(function(e){
                 e.preventDefault();
                 $.ajax({
-                    url: "main.php",   	// Url to which the request is send
+                    url: "/main.php",   	// Url to which the request is send
                     type: "POST",      				// Type of request to be send, called as method
                     data:  new FormData(this), 		// Data sent to server, a set of key/value pairs representing form fields and values 
                     contentType: false,       		// The content type used when sending data to the server. Default is: "application/x-www-form-urlencoded"
@@ -139,7 +139,6 @@ $(document).ready(function(){
                     processData:false,  			// To send DOMDocument or non processed data file it is set to false (i.e. data should not be in the form of string)
                     success: function(data)  	
                     {     
-                        alert('sucess');  
                     }	        
                });
                

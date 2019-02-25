@@ -37,7 +37,8 @@
             echo json_encode($data);
             
     }
-    if(isset($_POST['docuName'])){
+    if(isset($_POST['document'])){
+    
         $namef=$_POST['docuName'];
         $uploader='admin';
         $category=$_POST['category'];
@@ -52,27 +53,26 @@
 
         $query=mysqli_query($conn,"INSERT INTO files(namef,uploader,category,
             addinfo,designate,location) VALUES ('$namef','$uploader','$category','$addinfo','$designate',
-            '$final_file')") or die(mysqli_error($conn));
+            '$final_file')");
+            echo('thank you!!');
     }
-    if(isset($_POST['login'])){
+    if(isset($_GET['login'])){
         $msg=array();
-        $username=$_POST['username'];
-        $password=$_POST['password'];
+        $username=$_GET['username'];
+        $password=$_GET['password'];
 
         $query=mysqli_query($conn,"SELECT * FROM `user` WHERE username='$username' AND password='$password'");
 
         $matched=mysqli_num_rows($query) or die(mysqli_error($conn));
+
         if ($matched>0){
             $_SESSION['userdata']=mysqli_fetch_assoc($query) or die(mysqli_error($conn));
             $msg['msg']='success';
+            $data[]=$msg;
 
-            echo json_encode($msg);
-            }
-        else{
-                $msg['msg']='failed';
-
-                echo json_encode($msg);     
-            }
+            echo json_encode($data);
+        }
+             
            
     }
     if(isset($_GET['getFiles'])){ 

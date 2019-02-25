@@ -1,22 +1,4 @@
-//funtion for collapsable menu
-/*$(document).ready(function(){
-    var coll = document.getElementsByClassName("collapsible");
-    var i;
-
-for (i = 0; i < coll.length; i++) {
-  coll[i].addEventListener("click", function() {
-    this.classList.toggle("active");
-    var content = this.nextElementSibling;
-    if (content.style.maxHeight){
-      content.style.maxHeight = null;
-    } else {
-      content.style.maxHeight = content.scrollHeight + "px";
-    } 
-  });
-}
-});*/
 reloadCategory();
-
 function hideFieldCategory(){
     //var inputCategory = document.getElementById('fieldCategory');
 
@@ -49,8 +31,6 @@ function addCategory(){
         reloadCategory();
         $('#sidenav').load('#sidenav>*');
         inputCategory.innerHTML="";
-
-           
         }
     });
 }
@@ -88,9 +68,9 @@ $(document).ready(function(){
                     });    
 });
 }
-        function displayFiles(obj){
-           var idCategory = obj.value;
-           console.log(idCategory);
+     function displayFiles(obj){
+        var idCategory = obj.value;
+        console.log(idCategory);
            $('.centercon').html('');
            $('.centercon').html("<table class='table table-hover w-100'>"+
            "<thead class='fileheader'>"+
@@ -104,8 +84,8 @@ $(document).ready(function(){
            "<tbody id='tbbody'>"+    
            "</tbody>"+
            "</table>");
-           var dataString="category="+idCategory+"&getFiles=";
-           console.log(dataString);
+        var dataString="category="+idCategory+"&getFiles=";
+        console.log(dataString);
            if($.trim(idCategory).length>0){
                $.ajax({
                    url: "main.php",
@@ -132,22 +112,65 @@ $(document).ready(function(){
                });
            }
         }
-        function addDocument(obj){
-            var category=obj.value;
-            $('.filecontent').html("<i class='fa fa-folder-o'></i>"+category+"/..."+
-            "<form class='file' method='POST' id='document' enctype='multipart/form-data'>"+
+    function addDocument(obj){
+        var category=obj.value;
+           
+            $('.centercon').html("<div class='maincontent'></div>"+
+            "<div class='filecontent'><h1></h1></div>");
+            $('.filecontent').append("<i class='fa fa-folder-o'></i>"+category+"/..."+
+            "<form class='file' action='' id='submitForm' method='post' enctype='multipart/form-data'>"+
+            "<button class='btn btn-success adddocument' type='submit'>Add Document</button>"+
             "<input type='hidden' name='category' value='"+category+"'/>"+
-            "<button class='btn btn-success adddocument' type='submit' id='submitForm'>Add Document</button>"+
             "<div class='row'><div class='col-lg-4'><input type='text' class='form-control' name='docuName' placeholder='Document Name' required></div>"+
             "<div class='col-lg-4'><input type='text' name='designate' class='form-control' placeholder='Designation' required></div>"+
             "<div class='col-lg-4'><input type='text' name='addInfo' class='form-control' placeholder='Additional Details' required></div></div>"+
             "<input type='file' class='form-control fileInput' name='document' placeholder='Additional Details' onchange='readURL(this);' required><hr>"+
             " <img id='previewDocument' src='#' width='100%' alt='Preview Document'/></form>");
-
         }
+        $(document).ready(function(e){ 
+            $("#submitForm").on('submit',(function(e){
+                e.preventDefault();
+                $.ajax({
+                    url: "main.php",   	// Url to which the request is send
+                    type: "POST",      				// Type of request to be send, called as method
+                    data:  new FormData(this), 		// Data sent to server, a set of key/value pairs representing form fields and values 
+                    contentType: false,       		// The content type used when sending data to the server. Default is: "application/x-www-form-urlencoded"
+                    cache: false,					// To unable request pages to be cached
+                    processData:false,  			// To send DOMDocument or non processed data file it is set to false (i.e. data should not be in the form of string)
+                    success: function(data)  	
+                    {     
+                        alert('sucess');  
+                    }	        
+               });
+               
+            }));
+        });    
+    function submitForm(){
+        var name=$('#docuName').val();
+        var designate=$('#designate').val();
+        var addInfo=$('#addInfo').val();
+        var document=$('#document').val();
+        var category=$('#category').val();
+        var dataString="docuName="+name+"&designate="+designate+"&addInfo="+addInfo+"&document="+document+"&category="+category+"&submitDocument=";
+        console.log(dataString);
+        alert(dataString);
+            $.ajax({
+                type: "POST",
+                url: "main.php",
+                data: dataString,
+                crossDomain: true,
+                cache: false,
+                dataType:'json', 			
+                success: function(data)  		
+                {     
+                    alert('sucess');  
+                }	 
+
+            });
+    }
         
-        function readURL(input) {
-            if (input.files && input.files[0]) {
+    function readURL(input) {
+        if (input.files && input.files[0]) {
                 var reader = new FileReader();
                 reader.onload = function (e) {
                 $('#previewDocument').attr('src', e.target.result);
@@ -161,26 +184,6 @@ $(document).ready(function(){
            alert(category);
         }
 
-        function submitForm(){
-            alert('success');
-        }
-
-        $("#submitForm").on('submit',(function(e) { 
-                $.ajax({
-                    url: "/main.php",   	// Url to which the request is send
-                    type: "POST",      				// Type of request to be send, called as method
-                    data:  new FormData(this), 		// Data sent to server, a set of key/value pairs representing form fields and values 
-                    contentType: false,       		// The content type used when sending data to the server. Default is: "application/x-www-form-urlencoded"
-                    cache: false,					// To unable request pages to be cached
-                    processData:false,  			// To send DOMDocument or non processed data file it is set to false (i.e. data should not be in the form of string)
-                    success: function(data)  		// A function to be called if request succeeds
-                    {     
-                        alert('sucess');  
-                    }	        
-               });
-               e.preventDefault();
-            }));
-
         function loginFunction(){
             var userName=$("#username").val();
             var passWord=$("#password").val();
@@ -189,22 +192,23 @@ $(document).ready(function(){
             if($.trim(userName).length > 0)
             {
                 $.ajax({
-                    type: "POST",
+                    type: "GET",
                     url: "main.php",
                     data: dataString,
                     crossDomain: true,
                     cache: false,
                     dataType:'json',
+                    processData:false,
                     success:function(data){
-                        $.each(data, function(i, element) {
+                        $.each(data, function(i,element) {
                             var msg=element.msg;
-
+                            console.log(element.msg);
                             if(msg=='success'){
                                 console.log('successfull!!');
                                 window.location.href="home.php";
                             }
                             else{
-                                alert('failed!!!')
+                                console.log('error');
                             }
                         });
 

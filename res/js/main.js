@@ -54,7 +54,7 @@ $(document).ready(function(){
                                 "<button type='button' onclick='displayFiles(this);' class='btn btn-secondary w-100 btncategory' id='category"+i+"' value='"+categoryName+"'><i class='fa fa-folder-o'></i>" + categoryName + "</button>"+
                                 "<div class='btn-group' role='group'><button id='btnGroupDrop1' type='button' class='btn btn-secondary dropdown-toggle w-100' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'></button>"+
                                 "<div class='dropdown-menu' aria-labelledby='btnGroupDrop1'>"+
-                                "<button class='dropdown-item' href='#' value='"+categoryName+"' onclick='addDocument(this);'><i class='fa fa-plus-square-o'></i>"+
+                                "<button class='dropdown-item' href='#' value='"+categoryName+"' onclick='addDocument(this);' id='category"+i+"'><i class='fa fa-plus-square-o'></i>"+
                                 " Add Document</button><button value='"+categoryName+"' class='dropdown-item' href='#' onclick='removeCategory(this);'><i class='fa fa-trash-o'>"+
                                 "</i> Remove Category</button>"+
                                 "<button class='dropdown-item' href='#' value='"+categoryName+"' ><i class='fa fa-eye-slash'></i>"+
@@ -76,8 +76,8 @@ $(document).ready(function(){
            "<thead class='fileheader'>"+
                "<tr>"+
                "<th scope='col'>Name</th>"+
-               "<th scope='col'>Type</th>"+
-               "<th scope='col'>Size</th>"+
+               "<th scope='col'>Designate</th>"+
+               "<th scope='col'>Additional Info</th>"+
                "<th scope='col'>Date</th>"+
                "</tr>"+
            "</thead>"+
@@ -99,10 +99,12 @@ $(document).ready(function(){
                         $.each(data, function(i, element) {
                             var fileName=element.namef;
                             var date=element.datestamp;
+                            var designate=element.designate;
+                            var addinfo=element.addinfo;
                             $('#tbbody').append("<tr>"+
                             "<th scope='row'>"+fileName+"</th>"+
-                            "<td>Mark</td>"+
-                            "<td>Otto</td>"+
+                            "<td>"+designate+"</td>"+
+                            "<td>"+addinfo+"</td>"+
                             "<td>"+ date +"</td>"+
                             "</tr>");	 
                         }); 
@@ -114,36 +116,22 @@ $(document).ready(function(){
         }
     function addDocument(obj){
         var category=obj.value;
-           
+        var btnId=obj.id;
+        console.log(obj.id);
             $('.centercon').html("<div class='maincontent'></div>"+
             "<div class='filecontent'><h1></h1></div>");
+
             $('.filecontent').html("<i class='fa fa-folder-o'></i>"+category+"/..."+
-            "<form class='file' method='POST' id='document' enctype='multipart/form-data'>"+
+            "<form class='file' method='POST'' id='document' enctype='multipart/form-data'>"+
             "<input type='hidden' name='category' value='"+category+"'/>"+
-            "<button class='btn btn-success adddocument' id='submitForm' type='submit'>Add Document</button>"+
+            "<input type='hidden' name='buttonID' value='"+btnId+"'/>"+
+            "<button class='btn btn-success adddocument' type='submit'>Add Document</button>"+
             "<div class='row'><div class='col-lg-4'><input type='text' class='form-control' name='docuName' placeholder='Document Name'></div>"+
             "<div class='col-lg-4'><input type='text' name='designate' class='form-control' placeholder='Designation'></div>"+
             "<div class='col-lg-4'><input type='text' name='addInfo' class='form-control' placeholder='Additional Details'></div></div>"+
             "<input type='file' class='form-control fileInput' name='document' placeholder='Additional Details' onchange='readURL(this);'><hr>"+
             " <img id='previewDocument' src='#' width='100%' alt='Preview Document'/></form>");
         }
-        $(document).ready(function(e){ 
-            $("#submitForm").on('submit',(function(e){
-                e.preventDefault();
-                $.ajax({
-                    url: "/main.php",   	// Url to which the request is send
-                    type: "POST",      				// Type of request to be send, called as method
-                    data:  new FormData(this), 		// Data sent to server, a set of key/value pairs representing form fields and values 
-                    contentType: false,       		// The content type used when sending data to the server. Default is: "application/x-www-form-urlencoded"
-                    cache: false,					// To unable request pages to be cached
-                    processData:false,  			// To send DOMDocument or non processed data file it is set to false (i.e. data should not be in the form of string)
-                    success: function(data)  	
-                    {     
-                    }	        
-               });
-               
-            }));
-        });    
     function submitForm(){
         var name=$('#docuName').val();
         var designate=$('#designate').val();
@@ -217,3 +205,31 @@ $(document).ready(function(){
 
             }
         }
+        $(document).ready(function (e) {
+            $("#document").on('submit',(function(e) {
+                e.preventDefault();
+                $.ajax({
+                    url: "/main.php",   	// Url to which the request is send
+                    type: "POST",      				// Type of request to be send, called as method
+                    data:  new FormData(this), 		// Data sent to server, a set of key/value pairs representing form fields and values 
+                    contentType: false,       		// The content type used when sending data to the server. Default is: "application/x-www-form-urlencoded"
+                    cache: false,					// To unable request pages to be cached
+                    processData:false,  			// To send DOMDocument or non processed data file it is set to false (i.e. data should not be in the form of string)
+                    success: function(data)  		// A function to be called if request succeeds
+                    {
+
+                            
+                    }	        
+               });
+            }));
+        });
+        function getUrlVars() {
+            var vars = [], hash;
+            var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+            for (var i = 0; i < hashes.length; i++) {
+            hash = hashes[i].split('=');
+            vars.push(hash[0]);
+            vars[hash[0]] = hash[1];
+            }
+            return vars;
+           }

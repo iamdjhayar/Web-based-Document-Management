@@ -77,6 +77,28 @@ body{
 .fa .fa-ellipsis-h{
     margin:none;
 }
+a href:before{
+    color:lightgray;
+}
+.dropdown-menu{
+    margin-right:none;
+}
+.table-action{
+    background-color: inherit;
+    border-style: none;
+    margin:10 2 10 2;
+    position: relative;
+    float: right;
+}
+.category{
+    font-size: 15pt;
+    color:gray;
+    padding-left:10px;
+    margin-top:10px;
+}
+button:after{
+    border:none;
+}
 /*collapsible*/
 
 .collapsible {

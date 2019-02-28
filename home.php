@@ -1,20 +1,11 @@
 <html>
 <head>
     <?php include('inc/link.html');?>
-    <script>
-    var categorize=getUrlVars();
-    console.log(categorize);
-    $.each(categorize, function(key, value) {
-        var cat = value.category;
-    console.log(cat);
-    });
-   
-    </script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 </head>
 <body>
-    <?php include('inc/navbar.html'); 
-    include('main.php');
-    print_r($_SESSION['category']);?>
+    <?php include('inc/navbar.php'); ?>
     <div class="container-fluid">
     <div class="row">
     <div class="col-lg-2 sidenav">
@@ -32,7 +23,5 @@
 </div>
     </div>
     </div>
-    </div>
-</footer>
 </body>
 </html>

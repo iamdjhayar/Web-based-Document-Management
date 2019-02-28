@@ -70,9 +70,15 @@ $(document).ready(function(){
 }
      function displayFiles(obj){
         var idCategory = obj.value;
+        var catId=obj.id;
         console.log(idCategory);
            $('.centercon').html('');
-           $('.centercon').html("<table class='table table-hover w-100'>"+
+           $('.centercon').html("<div><p class='category'>"+ idCategory +
+           "<button class='table-action' id='"+ catId +"' value='"+ idCategory +"' onclick='addDocument(this);'><i class='fa fa-plus'></i></button>"+
+           "<button class='table-action'><i class='fa fa-trash'></i></button>"+
+           "<button class='table-action'><i class='fa fa-check-square-o'></i></button>"+
+           "</p></div>"+
+           "<table class='table table-hover w-100'>"+
            "<thead class='fileheader'>"+
                "<tr>"+
                "<th scope='col'>Name</th>"+
@@ -122,7 +128,7 @@ $(document).ready(function(){
             "<div class='filecontent'><h1></h1></div>");
 
             $('.filecontent').html("<i class='fa fa-folder-o'></i>"+category+"/..."+
-            "<form class='file' method='POST'' id='document' enctype='multipart/form-data'>"+
+            "<form class='file' method='POST' id='document' enctype='multipart/form-data'>"+
             "<input type='hidden' name='category' value='"+category+"'/>"+
             "<input type='hidden' name='buttonID' value='"+btnId+"'/>"+
             "<button class='btn btn-success adddocument' type='submit'>Add Document</button>"+
@@ -132,30 +138,6 @@ $(document).ready(function(){
             "<input type='file' class='form-control fileInput' name='document' placeholder='Additional Details' onchange='readURL(this);'><hr>"+
             " <img id='previewDocument' src='#' width='100%' alt='Preview Document'/></form>");
         }
-    function submitForm(){
-        var name=$('#docuName').val();
-        var designate=$('#designate').val();
-        var addInfo=$('#addInfo').val();
-        var document=$('#document').val();
-        var category=$('#category').val();
-        var dataString="docuName="+name+"&designate="+designate+"&addInfo="+addInfo+"&document="+document+"&category="+category+"&submitDocument=";
-        console.log(dataString);
-        alert(dataString);
-            $.ajax({
-                type: "POST",
-                url: "main.php",
-                data: dataString,
-                crossDomain: true,
-                cache: false,
-                dataType:'json', 			
-                success: function(data)  		
-                {     
-                    alert('sucess');  
-                }	 
-
-            });
-    }
-        
     function readURL(input) {
         if (input.files && input.files[0]) {
                 var reader = new FileReader();
@@ -205,9 +187,8 @@ $(document).ready(function(){
 
             }
         }
-        $(document).ready(function (e) {
-            $("#document").on('submit',(function(e) {
-                e.preventDefault();
+           $("#document").on('submit',(function(e) {
+                e.preventDefault();  
                 $.ajax({
                     url: "/main.php",   	// Url to which the request is send
                     type: "POST",      				// Type of request to be send, called as method
@@ -222,4 +203,3 @@ $(document).ready(function(){
                     }	        
                });
             }));
-        });

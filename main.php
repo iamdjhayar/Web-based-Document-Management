@@ -1,4 +1,7 @@
 <?php
+
+        session_start();
+
 		error_reporting( ~E_DEPRECATED & ~E_NOTICE );
 		define('DBHOST', 'localhost');
 		define('DBUSER', 'root');
@@ -82,9 +85,6 @@
 			move_uploaded_file($file_loc,$folder.$final_file);
         $query=mysqli_query($conn,"INSERT INTO files(namef,uploader,category,
             addinfo,designate,location) VALUES ('$namef','$uploader','$category','$addinfo','$designate',
-            '$final_file')") or die(mysqli_error($conn));
-        
-        
-       
+            '$final_file')") or die(mysqli_error($conn));  
     }
 ?>

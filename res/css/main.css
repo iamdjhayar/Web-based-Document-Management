@@ -32,8 +32,8 @@ body{
 .fileheader{
     background:rgb(235, 235, 235);
 }
-.border-left{
-    border-left:1px solid lightgray;
+.border-right{
+    border-right:1px solid lightgray;
 }
 .btncategory{
     text-align: left;

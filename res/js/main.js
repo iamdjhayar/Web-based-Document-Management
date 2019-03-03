@@ -76,7 +76,7 @@ $(document).ready(function(){
            $('.centercon').html("<div><p class='category'>"+ idCategory +
            "<button class='table-action' id='"+ catId +"' value='"+ idCategory +"' onclick='addDocument(this);'><i class='fa fa-plus'></i></button>"+
            "<button class='table-action'><i class='fa fa-trash'></i></button>"+
-           "<button class='table-action'><i class='fa fa-check-square-o'></i></button>"+
+           "<button class='table-action' id='chkToggle' onclick='chkToggle();'><i class='fa fa-check-square-o'></i></button>"+
            "</p></div>"+
            "<table class='table table-hover w-100'>"+
            "<thead class='fileheader'>"+
@@ -107,8 +107,8 @@ $(document).ready(function(){
                             var date=element.datestamp;
                             var designate=element.designate;
                             var addinfo=element.addinfo;
-                            $('#tbbody').append("<tr>"+
-                            "<th scope='row'>"+fileName+"</th>"+
+                            $('#tbbody').append("<tr class='tbl-tr'>"+
+                            "<td>"+fileName+"</th>"+
                             "<td>"+designate+"</td>"+
                             "<td>"+addinfo+"</td>"+
                             "<td>"+ date +"</td>"+
@@ -128,7 +128,7 @@ $(document).ready(function(){
             "<div class='filecontent'><h1></h1></div>");
 
             $('.filecontent').html("<i class='fa fa-folder-o'></i>"+category+"/..."+
-            "<form class='file' method='POST' id='document' enctype='multipart/form-data'>"+
+            "<form class='file' method='POST' action='' id='document' enctype='multipart/form-data'>"+
             "<input type='hidden' name='category' value='"+category+"'/>"+
             "<input type='hidden' name='buttonID' value='"+btnId+"'/>"+
             "<button class='btn btn-success adddocument' type='submit'>Add Document</button>"+
@@ -157,37 +157,42 @@ $(document).ready(function(){
             var userName=$("#username").val();
             var passWord=$("#password").val();
             var dataString="username=" + userName + "&password=" + passWord + "&login=";
-            
-            if($.trim(userName).length > 0)
+
+            if(userName=="" || passWord==""){
+                $('#errorMsg').html("<font color='red'>Please supply all needed data!</font>");
+            }
+            else{
+                if($.trim(userName).length > 0)
             {
                 $.ajax({
-                    type: "GET",
+                    type: "POST",
                     url: "main.php",
                     data: dataString,
                     crossDomain: true,
                     cache: false,
-                    dataType:'json',
+                    dataType:'text',
                     processData:false,
                     success:function(data){
-                        $.each(data, function(i,element) {
-                            var msg=element.msg;
-                            console.log(element.msg);
-                            if(msg=='success'){
-                                console.log('successfull!!');
-                                window.location.href="home.php";
-                            }
-                            else{
-                                console.log('error');
-                            }
-                        });
+                        
 
+                        if(data=='success'){
+                            $('#btn-login').html('Logging in...');
+                            window.location.href="home.php";
+                        }
+                        else{
+                            $('#errorMsg').html("<font color='red'>Please check your username and password</font>");  
+                        }
                     }
 
                 });
 
             }
+            }
+            
+            
         }
-           $("#document").on('submit',(function(e) {
+        $(function () {
+            $(document).on('submit', '#document', function (e) {
                 e.preventDefault();  
                 $.ajax({
                     url: "/main.php",   	// Url to which the request is send
@@ -202,4 +207,21 @@ $(document).ready(function(){
                             
                     }	        
                });
-            }));
+            });
+        });
+        
+        function chkToggle(){
+            var x = document.getElementById('chkBox');
+            var input = document.getElementById('chkInput');
+
+            if(x.style.display === "none"){
+                x.style.display="block";
+                input.style.display="block";
+
+            }else{
+                x.style.display="none";
+                input.style.display="none";
+            }
+
+
+        }

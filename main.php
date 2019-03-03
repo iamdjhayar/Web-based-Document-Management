@@ -1,17 +1,13 @@
 <?php
 
+    header("Access-Control-Allow-Origin: *");
+
         session_start();
 
 		error_reporting( ~E_DEPRECATED & ~E_NOTICE );
-		define('DBHOST', 'localhost');
-		define('DBUSER', 'root');
-		define('DBPASS', '');
-		define('DBNAME', 'documgmt');
 	
-		$conn = mysqli_connect(DBHOST,DBUSER,DBPASS);
-		$dbcon = mysqli_select_db($conn,DBNAME);
-	
-		if ( !$dbcon ) {
+		$conn = new mysqli("localhost","root","","documgmt");
+		if ( !$conn ) {
 		die("Database Connection failed : " . mysqli_error($conn));
         }
 
@@ -39,22 +35,19 @@
             echo json_encode($data);
             
     }
-    if(isset($_GET['login'])){
-        $msg=array();
-        $username=$_GET['username'];
-        $password=$_GET['password'];
+    if(isset($_POST['login'])){
+       
+        $username=$conn->real_escape_string($_POST['username']);
+        $password=$conn->real_escape_string($_POST['password']);
 
-        $query=mysqli_query($conn,"SELECT * FROM `user` WHERE username='$username' AND password='$password'");
+        $query=$conn->query("SELECT * FROM `user` WHERE username='$username' AND password='$password'");
 
-        $matched=mysqli_num_rows($query) or die(mysqli_error($conn));
-
-        if ($matched>0){
+        if ($query->num_rows>0){
             $_SESSION['userdata']=mysqli_fetch_assoc($query) or die(mysqli_error($conn));
-            $msg['msg']='success';
-            $data[]=$msg;
-
-            echo json_encode($data);
-        }
+            exit('success');
+        }else
+            exit('failed');
+        
              
            
     }
@@ -85,6 +78,9 @@
 			move_uploaded_file($file_loc,$folder.$final_file);
         $query=mysqli_query($conn,"INSERT INTO files(namef,uploader,category,
             addinfo,designate,location) VALUES ('$namef','$uploader','$category','$addinfo','$designate',
-            '$final_file')") or die(mysqli_error($conn));  
+            '$final_file')") or die(mysqli_error($conn)); 
+            if($query){
+                echo'success';
+            } 
     }
 ?>

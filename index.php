@@ -10,14 +10,15 @@
                 <img class="img-fluid" src="res/img/user_icon.jpg">
                 <hr>
                 <div class='form-group'>
-                    <input type="text" id="username" class="form-control" placeholder="Username" required>
+                    <input type="text" id="username" class="form-control" placeholder="Username">
                 </div>
                 <div class='form-group'>
-                    <input type="password" id="password" class="form-control" placeholder="Password" required>
+                    <input type="password" id="password" class="form-control" placeholder="Password">
                 </div>
                 <div class='form-group'>
-                    <button class='btn btn-info w-100' type="submit" onclick="loginFunction();" id="btn-login">SIGN IN</button>
+                    <button class='btn btn-info w-100' type="button" onclick="loginFunction();" id="btn-login">SIGN IN</button>
                 </div>
+                <p id='errorMsg'></p>
                 <p>Forgot Password or Username? Please Contact System Administrator</p>
 
 

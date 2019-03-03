@@ -1,0 +1,41 @@
+<html>
+    <head>
+            <script type="text/javascript" src="res/jquery/jquery-3.3.1.min.js"></script>
+    </head>
+    <body>
+            <form class='file' method='POST' action='' id='document' enctype='multipart/form-data'>
+                <input type='hidden' name='category' value='"+category+"'/>
+                <input type='hidden' name='buttonID' value='"+btnId+"'/>
+                <button class='btn btn-success adddocument' type='submit'>Add Document</button>
+                <div class='row'><div class='col-lg-4'><input type='text' class='form-control' name='docuName' placeholder='Document Name'></div>
+                <div class='col-lg-4'><input type='text' name='designate' class='form-control' placeholder='Designation'></div>
+                <div class='col-lg-4'><input type='text' name='addInfo' class='form-control' placeholder='Additional Details'></div></div>
+                <input type='file' class='form-control fileInput' name='document' placeholder='Additional Details' onchange='readURL(this);'><hr>
+                <img id='previewDocument' src='#' width='100%' alt='Preview Document'/></form>
+    </body>
+    <script> function readURL(input) {
+            if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                    $('#previewDocument').attr('src', e.target.result);
+                    };
+                    reader.readAsDataURL(input.files[0]);
+                    }
+                    $("#document").on('submit',(function(e) {
+                e.preventDefault();  
+                $.ajax({
+                    url: "/main.php",   	// Url to which the request is send
+                    type: "POST",      				// Type of request to be send, called as method
+                    data:  new FormData(this), 		// Data sent to server, a set of key/value pairs representing form fields and values 
+                    contentType: false,       		// The content type used when sending data to the server. Default is: "application/x-www-form-urlencoded"
+                    cache: false,					// To unable request pages to be cached
+                    processData:false,  			// To send DOMDocument or non processed data file it is set to false (i.e. data should not be in the form of string)
+                    success: function(data)  		// A function to be called if request succeeds
+                    {
+
+                            
+                    }	        
+               });
+            }));
+            }</script>
+    </html>

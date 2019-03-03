@@ -19,7 +19,7 @@
         
         </div>
     <div class="col-lg-3 rightnav">
-        sdjsdhfj
+        
 </div>
     </div>
     </div>

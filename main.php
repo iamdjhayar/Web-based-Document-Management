@@ -83,4 +83,24 @@
                 echo'success';
             } 
     }
+    if(isset($_GET['getFileProperties'])){
+        $id=$_GET['fileId'];
+        
+        $query=$conn->query("SELECT * FROM files WHERE id='$id'");
+        $fileProp=array();
+        while($row=$query->fetch_object()){
+            $fileProp[]=$row;
+            }
+            echo json_encode($fileProp);
+    }
+    if(isset($_POST['removeDocument'])){
+        $id=$conn->real_escape_string($_POST['fileId']);
+
+        $query=$conn->query("DELETE FROM files WHERE files.id='$id'") or die($conn->error());
+        
+        if($query){
+            exit('Success Delete');
+        }else
+            exit('Dalete Failed');
+    }
 ?>

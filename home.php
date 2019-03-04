@@ -19,8 +19,10 @@
         
         </div>
     <div class="col-lg-3 rightnav">
-        
-</div>
+       <div id="properties">
+            <footer>sjhsdjfh</footer>
+        </div>     
+    </div>
     </div>
     </div>
 </body>

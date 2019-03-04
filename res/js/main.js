@@ -72,6 +72,7 @@ $(document).ready(function(){
         var idCategory = obj.value;
         var catId=obj.id;
         console.log(idCategory);
+        $('#properties').html('');//Empty properties DIV content and element
            $('.centercon').html('');
            $('.centercon').html("<div><p class='category'>"+ idCategory +
            "<button class='table-action' id='"+ catId +"' value='"+ idCategory +"' onclick='addDocument(this);'><i class='fa fa-plus'></i></button>"+
@@ -85,6 +86,7 @@ $(document).ready(function(){
                "<th scope='col'>Designate</th>"+
                "<th scope='col'>Additional Info</th>"+
                "<th scope='col'>Date</th>"+
+               "<th scope='col'></th>"+
                "</tr>"+
            "</thead>"+
            "<tbody id='tbbody'>"+    
@@ -103,15 +105,25 @@ $(document).ready(function(){
                     processData:false,  			// To send DOMDocument or non processed data file it is set to false (i.e. data should not be in the form of string)
                     success: function(data){ 
                         $.each(data, function(i, element) {
+                            var fileId=element.id;
                             var fileName=element.namef;
                             var date=element.datestamp;
                             var designate=element.designate;
                             var addinfo=element.addinfo;
-                            $('#tbbody').append("<tr class='tbl-tr'>"+
-                            "<td>"+fileName+"</th>"+
+                            var fileCategory=element.category;
+                            $('#tbbody').append("<tr>"+
+                            "<td scope='row'>"+fileName+"</td>"+
                             "<td>"+designate+"</td>"+
                             "<td>"+addinfo+"</td>"+
                             "<td>"+ date +"</td>"+
+                            "<td><div id='drp-menu' class='dropdown show'>"+
+                            "<button class='btn btn-secondary dropdown-toggle' href='#' role='button' id='dropdownMenuLink'"+
+                            "data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'></button>"+
+                            "<div class='dropdown-menu dropdown-menu-right' aria-labelledby='dropdownMenuLink'>"+
+                              "<input type='hidden' id='fileCategory' value='"+fileCategory+"'>"+
+                              "<button onclick='displayProperties(this);' value='"+ fileId +"' class='dropdown-item' href='#'><i class='fa fa-list'></i> Properties</button>"+
+                              "<button class='dropdown-item' href='#'><i class='fa fa-pencil-square-o'></i> Update Properties</button>"+
+                              "<button onclick='removeDocument(this);' value='"+ fileId +"' class='dropdown-item' href='#'><i class='fa fa-trash-o'></i> Remove Document</button></div></div></td>"+
                             "</tr>");	 
                         }); 
                 }
@@ -120,6 +132,9 @@ $(document).ready(function(){
                });
            }
         }
+    function sample(){
+        alert('jsdhgfdshf');
+    }
     function addDocument(obj){
         var category=obj.value;
         var btnId=obj.id;
@@ -209,19 +224,60 @@ $(document).ready(function(){
                });
             });
         });
-        
-        function chkToggle(){
-            var x = document.getElementById('chkBox');
-            var input = document.getElementById('chkInput');
+        function displayProperties(obj) {
+            var fileId = obj.value;
+            var dataString = "fileId=" + fileId + "&getFileProperties=";
 
-            if(x.style.display === "none"){
-                x.style.display="block";
-                input.style.display="block";
+            $.ajax({
+                url: "main.php",
+                type: "GET",
+                data : dataString,
+                dataType: "JSON",
+                contentType: false,
+                cache: false,
+                processData: false,
+                success:function(data){
+                    $.each(data,function(i,prop){
+                        var fName = prop.namef;
+                        var fDesig = prop.designate;
+                        var fDate = prop.datestamp;
+                        var fAddInfo = prop.addinfo;
+                        var fCategory = prop.category;
+                        var fUploader = prop.uploader;
+                        $('#properties').html("<table id='tblProp'><tr><td id='rightAlign'>File Name: </td><td>"+fName+"</td></tr>"+
+                        "<tr><td id='rightAlign'>Designate: </td><td>"+fDesig+"</td></tr>"+
+                        "<tr><td id='rightAlign'>Additional Info: </td><td>"+fAddInfo+"</td></tr>"+
+                        "<tr><td id='rightAlign'>Date: </td><td>"+fDate+"</td></tr>"+
+                        "<tr><td id='rightAlign'>Category: </td><td>"+fCategory+"</td></tr>"+
+                        "<tr><td id='rightAlign'>Uploader: </td><td>"+fUploader+"</td></tr>"+
+                        "</table><hr>");
+                    });
 
-            }else{
-                x.style.display="none";
-                input.style.display="none";
-            }
+                }
+            });
+          }
+        function removeDocument(obj){
+            var fileId = obj.value;
+            var dataString = "fileId=" + fileId + "&removeDocument=";
+            $.ajax({
+                url: "main.php",
+                type: "POST",
+                data : dataString,
+                dataType: "text",
+                contentType: false,
+                cache: false,
+                processData: false,
+                success:function(data){
+                    alert(data);
 
+                }
 
+            });
         }
+        function searchDocument(){
+            var searchInput=$("#searchIDocumentInput").val();
+            console.log(searchInput);
+        }
+
+
+        

@@ -97,7 +97,7 @@ a href:before{
     margin-top:10px;
 }
 button:after{
-    border:none;
+    border-style:none;
 }
 /*collapsible*/
 
@@ -143,8 +143,51 @@ button:after{
   /*right navigation*/
   .rightnav{
         box-shadow: -10px 0 10px -10px lightgray;
+        padding: 20px;
+        align-content: center;
   }
+  #properties table{
+    border-spacing: 5px;
+    border-collapse: separate;
+  }
+  #properties table td{
+    padding: 2px;
+  }
+  #tblProp #rightAlign{
+      text-align: right;
+      color:darkgray;
+  }
+  #tblProp{
+      margin:  20px;
+  }
+  
   /*field input add category*/
   #fieldCategory{
       margin-bottom :5px;
   }
+  #btn-menu{
+      display:none;
+  }
+  .fa-ellipsis-h{
+      color:white;
+  }
+  #drp-menu{
+      display: none;
+      font-size:15pt;
+  }
+  #tbbody tr:hover #drp-menu{
+    display:block;
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+  }
+  #tbbody tr:hover{
+      background-color: #6ff49bad;
+      color:white;
+  }
+  #tbbody tr:after{
+    background-color: #6ff49bad;
+    color:white;
+}
+
+  

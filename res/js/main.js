@@ -276,6 +276,7 @@ $(document).ready(function(){
         }
         function searchDocument(){
             var searchInput=$("#searchIDocumentInput").val();
+            
             console.log(searchInput);
         }
 

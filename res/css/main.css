@@ -26,8 +26,23 @@ body{
     padding-left: 0;
     color:black;
 }
-.contentmargin{
-    margin-top:30px;
+.content-main{
+    margin:  50 20 0 20;
+    color: gray;
+}
+.content-main button.btn-default{
+    color: gray;
+}
+.addUser{
+    margin-bottom: 20px;
+}
+.addUserHeader{
+    font-size: 20px;
+    text-align: center;
+}
+.list-of-user{
+    border-right: 1px solid lightgray;
+    padding-right: 20px;
 }
 .fileheader{
     background:rgb(235, 235, 235);
@@ -54,7 +69,7 @@ body{
     margin-top:10px;
 }
 .adddocument{
-    float:right;
+    margin-bottom: 10px;
 }
 .login{
     background-color: lightgray;
@@ -98,6 +113,9 @@ a href:before{
 }
 button:after{
     border-style:none;
+}
+.check{
+    padding: 0;
 }
 /*collapsible*/
 
@@ -145,7 +163,31 @@ button:after{
         box-shadow: -10px 0 10px -10px lightgray;
         padding: 20px;
         align-content: center;
+        margin:0;
   }
+  .rightnav-action{
+      position:absolute;
+      width:350px;
+      height:100%;
+      box-shadow: 0 0 5px lightgray;
+      margin:0;
+      z-index:2;
+      padding:10px;
+      background-color: white;      
+      display:none;
+      transition: all 500ms linear;
+      right:-300px;
+      top:0px;
+  }
+  .rightnav-properties{
+    position:absolute;
+    z-index:1;
+  }
+  .filePreview{
+      width:100%;
+  }
+  /*//////*/
+
   #properties table{
     border-spacing: 5px;
     border-collapse: separate;
@@ -188,6 +230,12 @@ button:after{
   #tbbody tr:after{
     background-color: #6ff49bad;
     color:white;
-}
+  }
+  .navbar-custom .navbar-nav .navbtn{
+    margin: 0 3 0 3;
+  }
 
+ .navbar-custom .navbar-nav .navbtn .navlink:hover{
+    color: rgb(22, 188, 238);
+  }
   

@@ -15,25 +15,24 @@
             </ul>
       </div>
 <ul class="navbar-nav">
-<li class="nav-item">
-          <a class="nav-link" href="home.php"><i class="fa fa-home"></i><span class="sr-only">(current)</span></a>
+  <li class="nav-item navbtn">
+          <a class="nav-link" href="home.php"><i class="fa fa-home navlink"></i><span class="sr-only">(current)</span></a>
       </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#"><i class="fa fa-envelope-o"></i><span class="sr-only">(current)</span></a>
+      <li class="nav-item navbtn">
+        <a class="nav-link" href="#"><i class="fa fa-envelope-o navlink"></i><span class="sr-only">(current)</span></a>
     </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#"><i class="fa fa-bell-o"></i><span class="sr-only">(current)</span></a>
+      <li class="nav-item navbtn">
+        <a class="nav-link" href="#"><i class="fa fa-bell-o navlink"></i><span class="sr-only">(current)</span></a>
     </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#"><i class="fa fa-sticky-note-o"></i><span class="sr-only">(current)</span></a>
+      <li class="nav-item navbtn">
+        <a class="nav-link"  onclick="addNote();" href="#"><i class="fa fa-sticky-note-o navlink"></i><span class="sr-only">(current)</span></a>
     </li>
-    <li class="nav-item dropdown">
+    <li class="nav-item dropdown navbtn">
       <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        <i class="fa fa-cog"></i>
+        <i class="fa fa-cog navlink"></i>
       </a>
       <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-        <a class="dropdown-item" href="#">Add User</a>
-        <a class="dropdown-item" href="#">Manage User</a>
+        <a class="dropdown-item" href="#" onclick="manageUsers();">Manage User</a>
         <div class="dropdown-divider"></div>
         <a class="dropdown-item" href="#">Something else here</a>
       </div>
@@ -50,7 +49,6 @@
     <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
             <form class="form-inline my-2 my-lg-0">
                     <input class="form-control mr-sm-2" id="searchIDocumentInput" type="search" onkeyup="searchDocument();" placeholder="Search">
-                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
                   </form>
         
       </ul>

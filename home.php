@@ -14,11 +14,13 @@
         <div id="fieldCategory"></div>
         <div id="categories"></div>
     </div>
-    <div class="col-lg-7 centercon">
-        <div class="contentmargin"></div>
+    <div class="col-lg-7 centercon" id="centercon">
+        <div class="content-main"></div>
         
         </div>
     <div class="col-lg-3 rightnav">
+        <div class="rightnav-action">
+        </div>
        <div id="properties">
             <footer>sjhsdjfh</footer>
         </div>     

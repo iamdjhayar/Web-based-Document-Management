@@ -55,7 +55,7 @@
             
         $category=$_GET['category'];
 
-        $query=mysqli_query($conn,"SELECT * FROM files WHERE category='$category'");
+        $query=mysqli_query($conn,"SELECT * FROM files WHERE category='$category' ORDER BY datestamp DESC");
         $files=array();
         while($row=mysqli_fetch_object($query)){
             $files[]=$row;
@@ -63,7 +63,6 @@
             echo json_encode($files);
     }
     if(isset($_POST['docuName'])){
-        $btnID=$_POST['buttonID'];
         
         $namef=$_POST['docuName'];
         $uploader='admin';
@@ -76,11 +75,11 @@
 			$final_file=str_replace(' ','-',$new_file_name);
 			$folder="uploads/";
 			move_uploaded_file($file_loc,$folder.$final_file);
-        $query=mysqli_query($conn,"INSERT INTO files(namef,uploader,category,
+        $query=$conn->query("INSERT INTO files(namef,uploader,category,
             addinfo,designate,location) VALUES ('$namef','$uploader','$category','$addinfo','$designate',
-            '$final_file')") or die(mysqli_error($conn)); 
+            '$final_file')") or die($conn->error()); 
             if($query){
-                echo'success';
+                echo('success');
             } 
     }
     if(isset($_GET['getFileProperties'])){
@@ -93,14 +92,47 @@
             }
             echo json_encode($fileProp);
     }
-    if(isset($_POST['removeDocument'])){
-        $id=$conn->real_escape_string($_POST['fileId']);
+    if(isset($_GET['removeDocument'])){
+        $id=$_GET['fileId'];
 
-        $query=$conn->query("DELETE FROM files WHERE files.id='$id'") or die($conn->error());
+        $query=$conn->query("DELETE FROM files WHERE id='$id'") or die($conn->error());
         
         if($query){
             exit('Success Delete');
         }else
             exit('Dalete Failed');
     }
-?>
+    if(isset($_GET['searchDocument'])){
+        $searchInput=$_GET['searchInput'];
+        $query=$conn->query("SELECT * FROM files WHERE namef LIKE '%$searchInput%' OR designate LIKE '%$searchInput%' OR addinfo LIKE'%$searchInput%'");
+        $searchFile=array();
+        while($row=$query->fetch_object()){
+            $searchFile[]=$row;
+        }
+        echo json_encode($searchFile);
+    }
+    
+    
+
+/*function listFolderFiles($dir){
+    $ffs = scandir($dir);
+
+    unset($ffs[array_search('.', $ffs, true)]);
+    unset($ffs[array_search('..', $ffs, true)]);
+
+    // prevent empty ordered elements
+    if (count($ffs) < 1)
+        return;
+
+    echo "<ul id=list>";
+    foreach($ffs as $ff){
+        echo '<li>'.$ff;
+        if(is_dir($dir.'/'.$ff)) listFolderFiles($dir.'/'.$ff);
+        echo '</li>';
+        
+    }
+    echo '</ul>';
+}
+
+listFolderFiles('./uploads');*/
+

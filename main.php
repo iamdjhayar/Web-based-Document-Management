@@ -114,25 +114,32 @@
     
     
 
-/*function listFolderFiles($dir){
-    $ffs = scandir($dir);
-
-    unset($ffs[array_search('.', $ffs, true)]);
-    unset($ffs[array_search('..', $ffs, true)]);
-
-    // prevent empty ordered elements
-    if (count($ffs) < 1)
-        return;
-
-    echo "<ul id=list>";
-    foreach($ffs as $ff){
-        echo '<li>'.$ff;
-        if(is_dir($dir.'/'.$ff)) listFolderFiles($dir.'/'.$ff);
-        echo '</li>';
-        
+    if(isset($_GET['displayFolderAndFiles'])){
+        function listIt($path) {
+            $items = scandir($path);
+            
+            foreach($items as $item) {
+            
+                // Ignore the . and .. folders
+                if($item != "." AND $item != "..") {
+                    if (is_file($path . $item)) {
+                        // this is the file
+                        echo "<li class='li-file'><i class='fa fa-file-o'></i><a href='".$path.$item."'>".$item."</a></li>";
+                    } else {
+                        // this is the directory
+            
+                        // do the list it again!
+                        
+                        echo "<li><span class='fa fa-chevron-right caret'></span><button class='btn-der' onclick='directoryAction(this);' value='".$path.$item."/'>".$item."</button>";
+                        echo "<ul class='nested'>";
+                        listIt($path . $item . "/");
+                        //echo("<input type='text' value='".$path.$item."/'>");
+                        echo "</ul></li>"; 
+                    }
+                }
+              }
+            }
+            
+            listIt("./My Files/");
     }
-    echo '</ul>';
-}
-
-listFolderFiles('./uploads');*/
-
+?>

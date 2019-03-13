@@ -6,69 +6,6 @@ function hideFieldCategory(){
     alert('onclick pressed');
 
 }
-
-/*reloadCategory();
-function addCategory(){
-    var inputCategory = document.getElementById('fieldCategory');
-    inputCategory.innerHTML="<input id='category' placeholder='Add Category...' class='form-control' type='text'/>";
-    inputCategory.addEventListener("keyup",function(event){
-        if(event.keyCode == 13){
-            var category=$("#category").val();
-            var dataString="catName=" + category + "&addCategory=";
-        if ($.trim(category).length > 0 ) {
-                    $.ajax({
-                        type: "POST",
-                        url: "main.php",
-                        data: dataString,
-                        crossDomain: true,
-                        cache: false,
-                        dataType:'json',
-                        success: function(data) {
-                            console.log(data);
-                    }   
-                    });
-        }
-        $("#categories").html("");
-        reloadCategory();
-        $('#sidenav').load('#sidenav>*');
-        inputCategory.innerHTML="";
-        }
-    });
-}
-//dispaly list of category
-function reloadCategory(){
-$(document).ready(function(){
-    var dataString="displayCategory=";
-                    $.ajax({
-                        type: "GET",
-                        url: "main.php",
-                        data: dataString,
-                        crossDomain: true,
-                        cache: false,
-                        dataType:'json',
-                        success: function(data) {
-                            $.each(data, function(i, element) {
-                                var i;
-                                var id=element.id;
-                                var categoryName=element.catname;
-                                $("#categories").append("<div class='btn-group w-100' role='group'>"+
-                                "<button type='button' onclick='displayFiles(this);' class='btn btn-secondary w-100 btncategory' id='category"+i+"' value='"+categoryName+"'><i class='fa fa-folder-o'></i>" + categoryName + "</button>"+
-                                "<div class='btn-group' role='group'><button id='btnGroupDrop1' type='button' class='btn btn-secondary dropdown-toggle w-100' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'></button>"+
-                                "<div class='dropdown-menu' aria-labelledby='btnGroupDrop1'>"+
-                                "<button class='dropdown-item' href='#' value='"+categoryName+"' onclick='addDocument(this);' id='category"+i+"'><i class='fa fa-plus-square-o'></i>"+
-                                " Add Document</button><button value='"+categoryName+"' class='dropdown-item' href='#' onclick='removeCategory(this);'><i class='fa fa-trash-o'>"+
-                                "</i> Remove Category</button>"+
-                                "<button class='dropdown-item' href='#' value='"+categoryName+"' ><i class='fa fa-eye-slash'></i>"+
-                                " Change View</button>"+
-                                "<button class='dropdown-item' href='#' value='"+categoryName+"' ><i class='fa fa-edit'></i>"+
-                                " Rename</button></div></div></div>");
-                                i++;
-                    });
-                }
-                
-                    });    
-});
-}*/
      function displayFiles(obj){
         var idCategory = obj.value;
         var catId=obj.id;
@@ -140,25 +77,43 @@ $(document).ready(function(){
     function hideRNavAction() {
         $('.rightnav-action').css('display','none');
       }
+
     function addDocument(obj){
         var category=obj.value;
         var btnId=obj.id;
-        $('.rightnav').html('');
-        $('.rightnav').html("<div class='rightnav-action'></div>")
+        $('.rightnav').append("<div class='rightnav-action'></div>")
+        $('.rightnav-action').css('position','fixed');
         $('.rightnav-action').css('display','block');
-        $('.rightnav-action').css('right','0px');
-            $('.rightnav-action').html("<i class='fa fa-folder-o'></i>"+category+"/..."+
-            "<button class='btn float-right' onclick='hideRNavAction();'><i class='fa fa-close' style='font-size:10pt;'></i></button>"+
-            "<form class='file' method='POST' action='' id='document' enctype='multipart/form-data'>"+
-            "<input type='hidden' name='category' value='"+category+"'/>"+
-            "<input type='hidden' id='btnID' name='buttonID' value='"+btnId+"'/>"+
-            "<button class='btn btn-success w-100 adddocument' type='submit'>Add Document</button>"+
-            "<input type='text' class='form-control  fileInput' name='docuName' placeholder='Document Name'>"+
-            "<input type='text' name='designate' class='form-control fileInput' placeholder='Designation'>"+
-            "<input type='text' name='addInfo' class='form-control fileInput' placeholder='Additional Details'>"+
-            "<input type='file' class='form-control fileInput' name='document' placeholder='Additional Details' onchange='readURL(this);'><hr>"+
-            " <img id='previewDocument' src='#' width='100%' alt='Preview Document'/></form>");
+
+            $('.rightnav-action').html("<button class='btn-close' onclick='closeFileAction();'><i class='fa fa-close fa-btn-close'></i></button><div class='col-lg-12'>"+
+            "<div class='input-group input-group-sm file-action'>"+
+              "<input type='text' class='form-control file-name'>"+
+              "<span class='input-group-btn'>"+
+                "<button class='btn btn-secondary btn-file' type='button'><i class='fa fa-upload file-upload'></i></button>"+
+              "</span>"+
+            "</div>"+
+          "</div>"+
+        "</div>");
+            $('.rightnav-action').append("<form class='dragDrop' method='POST'>"+
+            "<input type='file' multiple>"+
+            "<p>Drag your files here or click in this area.</p>"+
+          "</form>");
+
+          $(document).ready(function(){
+            $(".dragDrop input[type='file'").change(function (e) {
+                var fileName = e. target. files[0]. name;
+                $('.file-name').val(fileName);
+              $('.dragDrop p').text(this.files.length + " file(s) selected");
+            });
+          });
         }
+
+        function closeFileAction(){
+            $('.rightnav-action').css('display','none');
+        }
+
+        
+        
     function readURL(input) {
         if (input.files && input.files[0]) {
                 var reader = new FileReader();
@@ -328,9 +283,67 @@ $(document).ready(function(){
                     "<button class='btn btn-success w-100'>ADD USER</button></form></div></div>");
         }
         $(document).ready(function(){
-            var dataString = "display"
+            var dataString = "displayFolderAndFiles=";
+            $.ajax({
+                url: "main.php",
+                type: "GET",
+                data: dataString,
+                dataType: "html",
+                contentType: false,
+                cache: false,
+                processData: false,
+                success:function(data){
+                    
+                    $('#fieldCategory').append("<script>var toggler = document.getElementsByClassName('caret');"+
+                    "var i;"+
+                    
+                    "for (i = 0; i < toggler.length; i++) {"+
+                      "toggler[i].addEventListener('click', function() {"+
+                        "this.parentElement.querySelector('.nested').classList.toggle('active');"+
+                        "this.classList.toggle('caret-down');"+
+                      "});"+
+                    "}</script><ul class='list'>"+data+"</ul>");  
+                    
+                    
+                }
+            });
 
         });
+       function directoryAction(obj){
+           var directory = obj.value
+           var editDer = directory.replace("./","");
+           $(".content-main").html("<button class='btn btn-default'><i class='fa fa-folder-o'></i></button>"+
+                "<button class='btn btn-default' onclick='addDocument(this);'><i class='fa fa-upload'></i></button>");
+           $(".content-main").append("<h5>"+editDer+"</h5>");
+           $(".content-main").append("<table class='table table-hover'>"+
+           "<thead class='thead-light'>"+
+           "<tr>"+
+           "<th scope='col' class='check' style='padding-bottom:10px'><input type='checkbox' class='form-control '/></th>"+
+           "<th scope='col'>First Name</th>"+
+           "<th scope='col'>Last Name</th>"+
+           "<th scope='col'>Username</th>"+
+             "</tr>"+
+             "</thead>"+
+             "<tbody>"+
+             "<tr>"+
+             "<th scope='row' class='check'><input type='checkbox' class='form-control'/></th>"+
+             "<td>Mark</td>"+
+             "<td>Otto</td>"+
+             "<td>@mdo</td></tr>"+
+             "<tr><th scope='row' class='check'><input type='checkbox' class='form-control'/></th>"+
+             "<td>Jacob</td>"+
+             "<td>Thornton</td>"+
+             "<td>@fat</td></tr>"+
+             "<tr>"+
+             "<th scope='row' class='check'><input type='checkbox' class='form-control'/></th>"+
+             "<td>Larry</td>"+
+             "<td>the Bird</td>"+
+             "<td>@twitter</td>"+
+             "</tr></tbody></table>");
+           
+       }
+       
+        
 
 
         

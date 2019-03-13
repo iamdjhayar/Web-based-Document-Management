@@ -4,6 +4,7 @@
 }
 body{
     color:gray;
+    height:100%;
 }
 .fa{
     color:lightgray;
@@ -27,11 +28,23 @@ body{
     color:black;
 }
 .content-main{
-    margin:  50 20 0 20;
+    margin:  20 20 0 20;
     color: gray;
 }
 .content-main button.btn-default{
     color: gray;
+    background-color: white;
+    float: right;
+    margin:none;
+}
+.content-main button.btn-default{
+    color: gray;
+    background-color: white;
+    float: right;
+    margin:0;
+}
+.btn-default .fa:hover{
+    color: #007bff;
 }
 .addUser{
     margin-bottom: 20px;
@@ -111,11 +124,10 @@ a href:before{
     padding-left:10px;
     margin-top:10px;
 }
-button:after{
-    border-style:none;
-}
-.check{
+th.check{
     padding: 0;
+    padding-top: 10px;
+    align-content: center;
 }
 /*collapsible*/
 
@@ -164,20 +176,18 @@ button:after{
         padding: 20px;
         align-content: center;
         margin:0;
+       
   }
   .rightnav-action{
-      position:absolute;
-      width:350px;
-      height:100%;
-      box-shadow: 0 0 5px lightgray;
-      margin:0;
-      z-index:2;
-      padding:10px;
-      background-color: white;      
-      display:none;
-      transition: all 500ms linear;
-      right:-300px;
-      top:0px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    position: absolute;
+    display: none;
+    box-shadow: 0 0 5px lightgray;
+    bottom:0%;
+    width:300px; 
+    background-color: #fff; 
+    opacity:1;
   }
   .rightnav-properties{
     position:absolute;
@@ -238,4 +248,136 @@ button:after{
  .navbar-custom .navbar-nav .navbtn .navlink:hover{
     color: rgb(22, 188, 238);
   }
+  .btn-der{
+      background-color: white;
+      border: none;
+      box-shadow: 0;
+      cursor: pointer;
+      color:gray;
+  }
+  .btn-der:hover{
+      border:none;
+      color: #007bff
+  }
+  .btn-der:after{
+    border:none;
+    color: rgb(240, 75, 57);
+}
+   /* Remove default bullets */
+ul,li, .list {
+    list-style-type: none;
+    margin-left: 10px;
+  }
+  .li-file{
+      margin-left: 25px;
+  }
+  .li-file:hover{
+    background-color: lightgray;
+}
+  li,.list{
+      background-color: white;
+  }
   
+  /* Remove margins and padding from the parent ul */
+  .list {
+    margin: 0;
+    padding: 0;
+    background-color: white;
+  }
+  /* Style the caret/arrow */
+  .caret {
+    cursor: pointer;
+    user-select: none; /* Prevent text selection */
+  }
+  
+  /* Create the caret/arrow with a unicode, and style it */
+  .caret::before {
+    color: gray;
+    display: inline-block;
+    margin-right: 6px;
+  }
+  
+  /* Rotate the caret/arrow icon when clicked on (using JavaScript) */
+  .caret-down::before {
+    transform: rotate(90deg);
+  }
+  
+  /* Hide the nested list */
+  .nested {
+    display: none;
+  }
+  
+  /* Show the nested list when the user clicks on the caret/arrow (with JavaScript) */
+  .active {
+    display: block;
+    background-color: white;
+  } 
+  ul.nested.active::after{
+      display: none;
+  }
+  .fa-chevron-right,.fa-file-o{
+      font-size:12px;
+  }
+
+  /*Drag and drop form for adding document*/
+  .dragDrop{
+    border-radius: 10px;
+    margin:10px;
+    border: 4px dashed lightgray;
+  }
+  .dragDrop p{
+    
+    text-align: center;
+    line-height: 170px;
+    color: gray;
+  }
+  .dragDrop input[type="file"]{
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    outline: none;
+    opacity: 0;
+  }
+  .dragDrop button{
+    margin: 0;
+    color: #fff;
+    background: #16a085;
+    border: none;
+    margin-top: -5px;
+    border-radius: 4px;
+    border-bottom: 4px solid #117A60;
+    transition: all .2s ease;
+    outline: none;
+  }
+  .dragDrop button:hover{
+    background: #149174;
+      color: #0C5645;
+  }
+  .dragDrop button:active{
+    border:0;
+  }
+  
+  .file-action{
+      margin:10px 0px 5px 0px;
+  }
+  .file-upload{
+      color: #fff;
+  }
+  .btn-file{
+      border-top-right-radius: 3px;
+      border-bottom-right-radius: 3px;
+  }
+  .btn-close{
+    margin:10px;
+    border: none;
+    background-color: transparent;
+  }
+  .btn-close .fa:hover{
+    color:rgb(255, 25, 0);
+}
+  .fa-btn-close{
+    font-size: 15pt;
+}
+

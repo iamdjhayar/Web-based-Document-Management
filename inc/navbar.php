@@ -50,8 +50,5 @@
             <form class="form-inline my-2 my-lg-0">
                     <input class="form-control mr-sm-2" id="searchIDocumentInput" type="search" onkeyup="searchDocument();" placeholder="Search">
                   </form>
-        
-      </ul>
-    </div>
   </nav>
   

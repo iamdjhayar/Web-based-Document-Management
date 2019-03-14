@@ -79,8 +79,7 @@ function hideFieldCategory(){
       }
 
     function addDocument(obj){
-        var category=obj.value;
-        var btnId=obj.id;
+        var directory=obj.value;
         $('.rightnav').append("<div class='rightnav-action'></div>")
         $('.rightnav-action').css('position','fixed');
         $('.rightnav-action').css('display','block');
@@ -89,7 +88,8 @@ function hideFieldCategory(){
             $('.rightnav-action').append("<form class='dragDrop' method='POST' id='document' enctype='multipart/form-data'>"+
             "<input type='file' name='fileDocument' multiple>"+
             "<p>Drag your files here or click in this area.</p>"+
-                "<div class='col-lg-12'>"+
+            "<input type='hidden' name='fileDirectory' value='"+ directory +"'"+
+                "<div class='col-lg-12'>"+ 
             "<div class='input-group input-group-sm file-action'>"+
               "<input type='text' class='form-control file-name' name='fileName' placeholder='File Name'>"+
               "<span class='input-group-btn'>"+
@@ -314,7 +314,7 @@ function hideFieldCategory(){
            var directory = obj.value
            var editDer = directory.replace("./","");
            $(".content-main").html("<button class='btn btn-default'><i class='fa fa-folder-o'></i></button>"+
-                "<button class='btn btn-default' onclick='addDocument(this);'><i class='fa fa-upload'></i></button>");
+                "<button class='btn btn-default' value='"+ directory +"' onclick='addDocument(this);'><i class='fa fa-upload'></i></button>");
            $(".content-main").append("<h5>"+editDer+"</h5>");
            $(".content-main").append("<table class='table table-hover'>"+
            "<thead class='thead-light'>"+

@@ -322,11 +322,11 @@ ul,li, .list {
   /*Drag and drop form for adding document*/
   .dragDrop{
     border-radius: 10px;
+    height: 250px;
     margin:10px;
     border: 4px dashed lightgray;
   }
   .dragDrop p{
-    
     text-align: center;
     line-height: 170px;
     color: gray;

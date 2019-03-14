@@ -62,19 +62,15 @@
             }
             echo json_encode($files);
     }
-    if(isset($_POST['docuName'])){
-        
+    if(isset($_POST['fileName'])){
+        $directory=$_POST['fileDirectory'];
         $namef=$_POST['fileName'];
         $uploader='admin';
-            $file = rand(1000,100000)."-".$_FILES['fileDocument']['name'];
+            $file = $namef;
 			$file_loc = $_FILES['fileDocument']['tmp_name'];
 			$new_file_name = strtolower($file);
-			$final_file=str_replace(' ','-',$new_file_name);
-			$folder="uploads/";
-			move_uploaded_file($file_loc,$folder.$final_file);
-        $query=$conn->query("INSERT INTO files(namef,uploader,category,
-            addinfo,designate,location) VALUES ('$namef','$uploader','$category','$addinfo','$designate',
-            '$final_file')") or die($conn->error()); 
+			move_uploaded_file($file_loc,$directory.$new_file_name);
+        $query=$conn->query("INSERT INTO files(namef,location) VALUES ('$new_file_name','$directory')") or die($conn->error()); 
             if($query){
                 echo('success');
             } 

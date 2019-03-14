@@ -85,18 +85,19 @@ function hideFieldCategory(){
         $('.rightnav-action').css('position','fixed');
         $('.rightnav-action').css('display','block');
 
-            $('.rightnav-action').html("<button class='btn-close' onclick='closeFileAction();'><i class='fa fa-close fa-btn-close'></i></button><div class='col-lg-12'>"+
+            $('.rightnav-action').html("<button class='btn-close' onclick='closeFileAction();'><i class='fa fa-close fa-btn-close'></i></button>");
+            $('.rightnav-action').append("<form class='dragDrop' method='POST'>"+
+            "<input type='file' multiple>"+
+            "<p>Drag your files here or click in this area.</p>"+
+                "<div class='col-lg-12'>"+
             "<div class='input-group input-group-sm file-action'>"+
-              "<input type='text' class='form-control file-name'>"+
+              "<input type='text' class='form-control file-name' name='fileName' placeholder='File Name'>"+
               "<span class='input-group-btn'>"+
                 "<button class='btn btn-secondary btn-file' type='button'><i class='fa fa-upload file-upload'></i></button>"+
               "</span>"+
             "</div>"+
           "</div>"+
-        "</div>");
-            $('.rightnav-action').append("<form class='dragDrop' method='POST'>"+
-            "<input type='file' multiple>"+
-            "<p>Drag your files here or click in this area.</p>"+
+        "</div>"+
           "</form>");
 
           $(document).ready(function(){
@@ -324,22 +325,20 @@ function hideFieldCategory(){
            "<th scope='col'>Username</th>"+
              "</tr>"+
              "</thead>"+
-             "<tbody>"+
-             "<tr>"+
-             "<th scope='row' class='check'><input type='checkbox' class='form-control'/></th>"+
-             "<td>Mark</td>"+
-             "<td>Otto</td>"+
-             "<td>@mdo</td></tr>"+
-             "<tr><th scope='row' class='check'><input type='checkbox' class='form-control'/></th>"+
-             "<td>Jacob</td>"+
-             "<td>Thornton</td>"+
-             "<td>@fat</td></tr>"+
-             "<tr>"+
-             "<th scope='row' class='check'><input type='checkbox' class='form-control'/></th>"+
-             "<td>Larry</td>"+
-             "<td>the Bird</td>"+
-             "<td>@twitter</td>"+
-             "</tr></tbody></table>");
+             "<tbody class='fileTbody'></tbody></table");
+            var dataString = "directory=" + directory + "&getFileFolder="
+             $.ajax({
+                url: "main.php",
+                type: "GET",
+                data: dataString,
+                dataType: "text",
+                contentType: false,
+                cache: false,
+                processData: false,
+                success:function(data){
+                    $(".fileTbody").append(data);
+                }
+             });
            
        }
        

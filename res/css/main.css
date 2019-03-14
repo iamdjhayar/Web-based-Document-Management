@@ -183,7 +183,7 @@ th.check{
     border-top-right-radius: 10px;
     position: absolute;
     display: none;
-    box-shadow: 0 0 5px lightgray;
+    box-shadow: 0 0 10px #288bf529;
     bottom:0%;
     width:300px; 
     background-color: #fff; 
@@ -340,25 +340,6 @@ ul,li, .list {
     outline: none;
     opacity: 0;
   }
-  .dragDrop button{
-    margin: 0;
-    color: #fff;
-    background: #16a085;
-    border: none;
-    margin-top: -5px;
-    border-radius: 4px;
-    border-bottom: 4px solid #117A60;
-    transition: all .2s ease;
-    outline: none;
-  }
-  .dragDrop button:hover{
-    background: #149174;
-      color: #0C5645;
-  }
-  .dragDrop button:active{
-    border:0;
-  }
-  
   .file-action{
       margin:10px 0px 5px 0px;
   }

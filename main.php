@@ -142,4 +142,32 @@
             
             listIt("./My Files/");
     }
+    if(isset($_GET['getFileFolder'])){
+        $directory=$_GET['directory'];
+        function fileList($path) {
+            $items = scandir($path);
+            
+            foreach($items as $item) {
+            
+                // Ignore the . and .. folders
+                if($item != "." AND $item != "..") {
+                    if (is_file($path . $item)) {
+                        // this is the file
+                        echo "<tr><td></td><td>".$item."</td><td></td><td></td></tr>";
+                    } else {
+                        // this is the directory
+            
+                        // do the list it again!
+                        
+                        echo "<tr><td></td><td><i class='fa fa-folder'></i>".$item;
+                        fileList($path . $item . "/");
+                        echo "</td><td></td><td></td></tr>"; 
+                    }
+                }
+              }
+            }
+            
+            fileList($directory);
+
+    }
 ?>

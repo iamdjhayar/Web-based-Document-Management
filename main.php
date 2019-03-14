@@ -64,13 +64,10 @@
     }
     if(isset($_POST['docuName'])){
         
-        $namef=$_POST['docuName'];
+        $namef=$_POST['fileName'];
         $uploader='admin';
-        $category=$_POST['category'];
-        $addinfo=$_POST['addInfo'];
-        $designate=$_POST['designate'];
-            $file = rand(1000,100000)."-".$_FILES['document']['name'];
-			$file_loc = $_FILES['document']['tmp_name'];
+            $file = rand(1000,100000)."-".$_FILES['fileDocument']['name'];
+			$file_loc = $_FILES['fileDocument']['tmp_name'];
 			$new_file_name = strtolower($file);
 			$final_file=str_replace(' ','-',$new_file_name);
 			$folder="uploads/";

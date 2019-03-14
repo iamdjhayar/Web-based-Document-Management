@@ -86,14 +86,14 @@ function hideFieldCategory(){
         $('.rightnav-action').css('display','block');
 
             $('.rightnav-action').html("<button class='btn-close' onclick='closeFileAction();'><i class='fa fa-close fa-btn-close'></i></button>");
-            $('.rightnav-action').append("<form class='dragDrop' method='POST'>"+
-            "<input type='file' multiple>"+
+            $('.rightnav-action').append("<form class='dragDrop' method='POST' id='document' enctype='multipart/form-data'>"+
+            "<input type='file' name='fileDocument' multiple>"+
             "<p>Drag your files here or click in this area.</p>"+
                 "<div class='col-lg-12'>"+
             "<div class='input-group input-group-sm file-action'>"+
               "<input type='text' class='form-control file-name' name='fileName' placeholder='File Name'>"+
               "<span class='input-group-btn'>"+
-                "<button class='btn btn-secondary btn-file' type='button'><i class='fa fa-upload file-upload'></i></button>"+
+                "<button class='btn btn-secondary btn-file' type='submit'><i class='fa fa-upload file-upload'></i></button>"+
               "</span>"+
             "</div>"+
           "</div>"+

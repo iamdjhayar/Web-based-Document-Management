@@ -9,6 +9,9 @@
     <div class="container-fluid">
     <div class="row">
     <div class="col-lg-2 sidenav">
+        <button class='btn btn-warning w-100'>NEW FILE</button>
+        <div class='btn-spacing'></div>
+        <button class='btn btn-info w-100'>NEW FOLDER</button>
         <hr>
         <h5>Main Directory</h5>
         <div id="fieldCategory"></div>

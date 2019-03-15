@@ -13,7 +13,13 @@ body{
 
 }
 .sidenav{
-    margin-top:50px;
+    margin-top:20px;
+}
+.btn-spacing{
+    margin-top:10px;
+}
+.btn-warning{
+    color:white;
 }
 .btn{
     border-radius: 0;
@@ -196,6 +202,9 @@ th.check{
   .filePreview{
       width:100%;
   }
+  #addFileForm{
+      padding:10px;
+  }
   /*//////*/
 
   #properties table{
@@ -328,7 +337,7 @@ ul,li, .list {
   }
   .dragDrop p{
     text-align: center;
-    line-height: 170px;
+    line-height: 150px;
     color: gray;
   }
   .dragDrop input[type="file"]{

@@ -62,15 +62,24 @@
             }
             echo json_encode($files);
     }
-    if(isset($_POST['fileName'])){
+    if(isset($_POST['tempFileName'])){
+        $new_name=$_POST['fileName'];
+        $file="";
+        if(strlen($new_name)>0){
+            $name=$_FILES['fileDocument']['name'];
+            $ext=end((explode(".",$name)));
+            $file = $new_name.".".$ext;
+        }else{
+            $file=$_FILES['fileDocument']['name'];
+        }
+        
         $directory=$_POST['fileDirectory'];
-        $namef=$_POST['fileName'];
         $uploader='admin';
-            $file = $namef;
+            
 			$file_loc = $_FILES['fileDocument']['tmp_name'];
 			$new_file_name = strtolower($file);
 			move_uploaded_file($file_loc,$directory.$new_file_name);
-        $query=$conn->query("INSERT INTO files(namef,location) VALUES ('$new_file_name','$directory')") or die($conn->error()); 
+        $query=$conn->query("INSERT INTO files(namef,uploader,location) VALUES ('$new_file_name','$uploader','$directory')") or die($conn->error()); 
             if($query){
                 echo('success');
             } 
@@ -104,6 +113,15 @@
         }
         echo json_encode($searchFile);
     }
+    if(isset($_GET['getFileInDirectory'])){
+        $directory=$_GET['directory'];
+        $query=$conn->query("SELECT * FROM files WHERE location='$directory'") or die($conn->error());
+        $file_in_directory=array();
+        while($row=$query->fetch_object()){
+            $file_in_directory[]=$row;
+            }
+            echo json_encode($file_in_directory);
+    }
     
     
 
@@ -117,7 +135,7 @@
                 if($item != "." AND $item != "..") {
                     if (is_file($path . $item)) {
                         // this is the file
-                        echo "<li class='li-file'><i class='fa fa-file-o'></i><a href='".$path.$item."'>".$item."</a></li>";
+                        echo "<li class='li-file'><i class='fa fa-file-o'></i><a target='_blank' href='".$path.$item."'>".$item."</a></li>";
                     } else {
                         // this is the directory
             
@@ -134,33 +152,5 @@
             }
             
             listIt("./My Files/");
-    }
-    if(isset($_GET['getFileFolder'])){
-        $directory=$_GET['directory'];
-        function fileList($path) {
-            $items = scandir($path);
-            
-            foreach($items as $item) {
-            
-                // Ignore the . and .. folders
-                if($item != "." AND $item != "..") {
-                    if (is_file($path . $item)) {
-                        // this is the file
-                        echo "<tr><td></td><td>".$item."</td><td></td><td></td></tr>";
-                    } else {
-                        // this is the directory
-            
-                        // do the list it again!
-                        
-                        echo "<tr><td></td><td><i class='fa fa-folder'></i>".$item;
-                        fileList($path . $item . "/");
-                        echo "</td><td></td><td></td></tr>"; 
-                    }
-                }
-              }
-            }
-            
-            fileList($directory);
-
     }
 ?>

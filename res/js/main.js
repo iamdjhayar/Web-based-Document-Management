@@ -88,8 +88,8 @@ function hideFieldCategory(){
             $('.rightnav-action').append("<form class='dragDrop' method='POST' id='document' enctype='multipart/form-data'>"+
             "<input type='file' name='fileDocument' multiple>"+
             "<p>Drag your files here or click in this area.</p>"+
-            "<input type='hidden' name='fileDirectory' value='"+ directory +"'"+
-                "<div class='col-lg-12'>"+ 
+            "<input type='hidden' id='file_directory' name='fileDirectory' value='"+ directory +"'"+
+                "<div class='col-lg-12' id='addFileForm'>"+ 
             "<div class='input-group input-group-sm file-action'>"+
               "<input type='text' class='form-control file-name' name='fileName' placeholder='File Name'>"+
               "<span class='input-group-btn'>"+
@@ -103,8 +103,7 @@ function hideFieldCategory(){
           $(document).ready(function(){
             $(".dragDrop input[type='file'").change(function (e) {
                 var fileName = e. target. files[0]. name;
-                $('.file-name').val(fileName);
-              $('.dragDrop p').text(this.files.length + " file(s) selected");
+              $('.dragDrop p').html(this.files.length + " file(s) selected<br><input type='text' class='form-control' name='tempFileName' value='"+ fileName +"' readonly>");
             });
           });
         }
@@ -165,7 +164,7 @@ function hideFieldCategory(){
         }
         $(function () {
             $(document).on('submit', '#document', function (e) {
-                var btnID = $('#btnID').val();
+                var directory = $('#file_directory').val();
                 e.preventDefault();  
                 $.ajax({
                     url: "/main.php",   	// Url to which the request is send
@@ -177,11 +176,9 @@ function hideFieldCategory(){
                     processData:false,  			// To send DOMDocument or non processed data file it is set to false (i.e. data should not be in the form of string)
                     success: function(data)  		// A function to be called if request succeeds
                     {
-                        if(data=="success"){
-                            $('#'+btnID).click();
-                        }
-
-                            
+                        $('.rightnav-action').css('display','none'); 
+                        
+                        directoryAction(directory);
                     }	        
                });
             });
@@ -320,26 +317,31 @@ function hideFieldCategory(){
            "<thead class='thead-light'>"+
            "<tr>"+
            "<th scope='col' class='check' style='padding-bottom:10px'><input type='checkbox' class='form-control '/></th>"+
-           "<th scope='col'>First Name</th>"+
-           "<th scope='col'>Last Name</th>"+
-           "<th scope='col'>Username</th>"+
+           "<th scope='col'>File Name</th>"+
+           "<th scope='col'>Uploader</th>"+
+           "<th scope='col'>Date Modefied</th>"+
              "</tr>"+
              "</thead>"+
              "<tbody class='fileTbody'></tbody></table");
-            var dataString = "directory=" + directory + "&getFileFolder="
+            var dataString = "directory=" + directory + "&getFileInDirectory="
              $.ajax({
                 url: "main.php",
                 type: "GET",
                 data: dataString,
-                dataType: "text",
+                dataType: "json",
                 contentType: false,
                 cache: false,
                 processData: false,
                 success:function(data){
-                    $(".fileTbody").append(data);
+                    $.each(data,function(i,element){
+                        var fName = element.namef;
+                        var uploader = element.uploader;
+                        var datestamp = element.datestamp;
+                        $(".fileTbody").append("<tr><th scope='row'><input type='checkbox' class='form-control '/></th>"+
+                        "<td>"+ fName +"</td><td>"+uploader+"</td><td>"+datestamp+"</td></tr>");
+                    });
                 }
              });
-           
        }
        
         

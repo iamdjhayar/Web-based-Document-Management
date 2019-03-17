@@ -1,11 +1,10 @@
+$(document).ready(function(){
 
-function hideFieldCategory(){
-    //var inputCategory = document.getElementById('fieldCategory');
+    $(".content-main").html("<div class='container'><div class='row'><div class='col col-lg-4 folder-count'><i class='fa fa-file-o'></i>25</div>"+
+        "<div class='col col-lg-3 file-count'>25</div>"+
+        "<div class='col col-lg-4 user-count'>+1000</div></div></div><hr>");
 
-    //inputCategory.style.display='none';
-    alert('onclick pressed');
-
-}
+});
      function displayFiles(obj){
         var idCategory = obj.value;
         var catId=obj.id;
@@ -313,13 +312,13 @@ function hideFieldCategory(){
            $(".content-main").html("<button class='btn btn-default'><i class='fa fa-folder-o'></i></button>"+
                 "<button class='btn btn-default' value='"+ directory +"' onclick='addDocument(this);'><i class='fa fa-upload'></i></button>");
            $(".content-main").append("<h5>"+editDer+"</h5>");
-           $(".content-main").append("<table class='table table-hover'>"+
-           "<thead class='thead-light'>"+
-           "<tr>"+
-           "<th scope='col' class='check' style='padding-bottom:10px'><input type='checkbox' class='form-control '/></th>"+
-           "<th scope='col'>File Name</th>"+
-           "<th scope='col'>Uploader</th>"+
-           "<th scope='col'>Date Modefied</th>"+
+           $(".content-main").append("<table class='record_table'>"+
+           "<thead>"+
+           "<tr class='tblHeading'>"+
+           "<th class='check' style='padding-bottom:10px'><input type='checkbox' class='form-control '/></th>"+
+           "<th>File Name</th>"+
+           "<th>Uploader</th>"+
+           "<th>Date Modefied</th>"+
              "</tr>"+
              "</thead>"+
              "<tbody class='fileTbody'></tbody></table");
@@ -333,16 +332,48 @@ function hideFieldCategory(){
                 cache: false,
                 processData: false,
                 success:function(data){
+                    var id = 0;
                     $.each(data,function(i,element){
                         var fName = element.namef;
                         var uploader = element.uploader;
                         var datestamp = element.datestamp;
-                        $(".fileTbody").append("<tr><th scope='row'><input type='checkbox' class='form-control '/></th>"+
+                        var fileId = element.id;
+                        $(".fileTbody").append("<tr class='clickRow' id='"+ id + "'><td><input id='file"+ id +"' type='hidden' value='"+ fileId +"'>"+
+                        "<input type='checkbox' id='chk"+ id + "' class='form-control'/></td>"+
                         "<td>"+ fName +"</td><td>"+uploader+"</td><td>"+datestamp+"</td></tr>");
+                        id++;
                     });
                 }
              });
        }
+       
+       function clickRow(event){
+           if(event.target.type !== 'checkbox'){
+            alert('asjdgs');
+           }
+       }
+       $(document).ready(function(){
+        $('.content-main').on('click', '.record_table .clickRow', function(event) {
+            var id = this.id;
+            var fileId = $('#file'+id).val();
+            console.log(fileId);
+            
+            });
+       });
+       $(document).ready(function(){
+            $('.content-main').on('change','.clickRow input[type=checkbox]', function(){
+                var countCheckedCheckboxes = $('.clickRow input[type=checkbox]').filter(':checked').length;
+                if(countCheckedCheckboxes == 0){
+                    $('.selectFileAction').css('display','none'); 
+                }else{
+                    $('.selectFileAction').css('display','block');
+                    $('.selectFileAction').html(countCheckedCheckboxes + ' files selected');
+                }
+                
+            });
+       });
+       
+       
        
         
 

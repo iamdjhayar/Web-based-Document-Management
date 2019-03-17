@@ -18,8 +18,8 @@
         <div id="categories"></div>
     </div>
     <div class="col-lg-7 centercon" id="centercon">
+        <div class='selectFileAction bg-warning text-white'></div>
         <div class="content-main"></div>
-        
         </div>
     <div class="col-lg-3 rightnav">
         <div class="rightnav-action">

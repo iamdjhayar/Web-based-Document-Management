@@ -1,5 +1,5 @@
 *{
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     font-size: 10pt;
 }
 body{
@@ -20,6 +20,36 @@ body{
 }
 .btn-warning{
     color:white;
+}
+.folder-count{
+    border-top-right-radius: 30px;
+    border-bottom-left-radius: 30px;
+    background-color: #007bff;
+    margin: 10px;
+    color:white;
+    font-size: 45pt;
+    line-height: 150px;
+    text-align: center;
+}
+.file-count{
+    border-top-right-radius: 30px;
+    border-bottom-left-radius: 30px;
+    background-color: #868e96;
+    color:white;
+    margin: 10px;
+    line-height: 150px;
+    text-align: center;
+    font-size: 45pt;
+}
+.user-count{
+    border-top-right-radius: 30px;
+    border-bottom-left-radius: 30px;
+    background-color: rgb(125, 66, 242);
+    color:white;
+    margin: 10px;
+    line-height: 150px;
+    text-align: center;
+    font-size: 45pt;
 }
 .btn{
     border-radius: 0;
@@ -370,4 +400,34 @@ ul,li, .list {
   .fa-btn-close{
     font-size: 15pt;
 }
+    .clickRow{
+        cursor: pointer;
+    }
+.fileTable{
+    width: 100%;
+}
+.record_table {
+    width: 100%;
+    border-collapse: collapse;
+}
 
+.selectFileAction{
+    display: none;
+    margin: 10 20 -10 20;
+    opacity: 1;
+    padding: 5px;
+    font-size: 10pt;
+}
+
+.record_table .clickRow:hover {
+    background: #eee;
+}
+
+.record_table .tblHeading{
+    background-color: rgb(228, 228, 228);
+}
+
+.record_table td {
+    padding: 5px 3px 5px 3px;
+    border-top: 1px solid #eee;
+}

@@ -25,11 +25,12 @@
         <div class="rightnav-action">
         </div>
        <div id="properties">
-            <footer>sjhsdjfh</footer>
+            
         </div>     
     </div>
     </div>
     </div>
+    <?php include('inc/deleteModal.html') ?>
 </body>
 
 </html>

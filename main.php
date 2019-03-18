@@ -153,4 +153,16 @@
             
             listIt("./My Files/");
     }
+    if(isset($_GET['displayFileProperty'])){
+        $fileId = $_GET['fileId'];
+
+        $query = $conn ->query("SELECT * FROM files WHERE id='$fileId'");
+
+        $fileProperty=array();
+        while($row=$query->fetch_object()){
+            $fileProperty[]=$row;
+            }
+            echo json_encode($fileProperty);
+
+    }
 ?>

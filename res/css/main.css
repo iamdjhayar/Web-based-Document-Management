@@ -2,6 +2,19 @@
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     font-size: 10pt;
 }
+object{
+    height:300px;
+    width:100%
+}
+iframe{
+    width:100%;
+    height:300px;
+    border:none;
+    scrolling:"no";
+    align-content: center;
+    align-items: center;
+    
+}
 body{
     color:gray;
     height:100%;
@@ -412,22 +425,95 @@ ul,li, .list {
 }
 
 .selectFileAction{
+    position: relative;
     display: none;
     margin: 10 20 -10 20;
     opacity: 1;
-    padding: 5px;
+    padding: 5px 10px 5px 10px ;
     font-size: 10pt;
+}
+
+.file-action-row .fa{
+    font-size: 10pt;
+}
+.btn-file-action{
+    color:#fff;
+    background-color: transparent;
+
+}
+.checkbox-round {
+    width: 1.3em;
+    height: 1.3em;
+    background-color: white;
+    border-radius: 50%;
+    vertical-align: middle;
+    border: 1px solid #ddd;
+    -webkit-appearance: none;
+    outline: none;
+    cursor: pointer;
+}
+
+.checkbox-round:checked {
+    background-color: #138496;
+}
+button.navbar-toggler-icon{
+    color:lightgray
+}
+.btn-file-action .fa{
+    color: #fff;
+    font-size: 12pt; 
+}
+
+.btn-delete{
+    margin-left:10px;
 }
 
 .record_table .clickRow:hover {
     background: #eee;
 }
 
-.record_table .tblHeading{
-    background-color: rgb(228, 228, 228);
-}
-
 .record_table td {
     padding: 5px 3px 5px 3px;
     border-top: 1px solid #eee;
 }
+
+.record_table .check{
+    align-content: center
+}
+.record_table th{
+    align-content: center;
+    padding:5px 3px 5px 3px
+}
+
+
+.record_table .tblHeading{
+    background-color: rgb(228, 228, 228);
+}
+
+.file-property{
+
+    width: 100%;
+    border-collapse: collapse;
+
+}
+
+.file-property td{
+    border-bottom: 1px solid lightgray;
+}
+
+.file-preview{
+    background-color: #eee;
+    text-align: center;
+    line-height: 300px;
+    height: 300px;
+    width: 100%;
+}
+
+.file-preview .fa{
+    font-size:70pt;
+    line-height: 300px;
+}
+#exampleModal{
+    border-radius: 0;
+}
+

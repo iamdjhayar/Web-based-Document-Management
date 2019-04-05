@@ -9,7 +9,7 @@
     <div class="container-fluid">
     <div class="row">
     <div class="col-lg-2 sidenav">
-        <button class='btn btn-warning w-100'>NEW FILE</button>
+        <button class='btn btn-warning w-100' onclick="addDocument();">NEW FILE</button>
         <div class='btn-spacing'></div>
         <button class='btn btn-info w-100'>NEW FOLDER</button>
         <hr>

@@ -65,8 +65,6 @@ $(document).ready(function(){
                             "</tr>");	 
                         }); 
                 }
-
-
                });
            }
         }
@@ -76,9 +74,9 @@ $(document).ready(function(){
     function hideRNavAction() {
         $('.rightnav-action').css('display','none');
       }
-
-    function addDocument(obj){
-        var directory=obj.value;
+    function addDocument(){
+        var directory=$(".folderDir").val();
+        console.log(directory);
         $('.rightnav').append("<div class='rightnav-action'></div>")
         $('.rightnav-action').css('position','fixed');
         $('.rightnav-action').css('display','block');
@@ -176,7 +174,6 @@ $(document).ready(function(){
                     success: function(data)  		// A function to be called if request succeeds
                     {
                         $('.rightnav-action').css('display','none'); 
-                        
                         directoryAction(directory);
                     }	        
                });
@@ -264,13 +261,11 @@ $(document).ready(function(){
             }
         }
         function addNote(){
-            alert('note added');
+            $(".rightnav").html("MY NOTES");
         }
         function manageUsers(){
-            $('.centercon').html('');
-            $('.centercon').html("<div class='content-main'></div>");
-
-            $('.content-main').append("<div class='row'><div class='col col-lg-6'><div class='list-of-user'>"+
+            $('.selectFileAction').css('display','none');  
+            $('.content-main').html("<div class='row'><div class='col col-lg-6'><div class='list-of-user'>"+
                     "<p class='addUserHeader'>List Of User</p><button class='btn btn-default w-100'>admin 27</button></div></div>"+
                     "<div class='col col-lg-6'><form><p class='addUserHeader'>Add User</p>"+
                     "<input type='text' class='form-control addUser' placeholder='Username'>"+
@@ -290,29 +285,23 @@ $(document).ready(function(){
                 cache: false,
                 processData: false,
                 success:function(data){
-                    
                     $('#fieldCategory').append("<script>var toggler = document.getElementsByClassName('caret');"+
                     "var i;"+
-                    
                     "for (i = 0; i < toggler.length; i++) {"+
                       "toggler[i].addEventListener('click', function() {"+
                         "this.parentElement.querySelector('.nested').classList.toggle('active');"+
                         "this.classList.toggle('caret-down');"+
                       "});"+
-                    "}</script><ul class='list'>"+data+"</ul>");  
-                    
-                    
+                    "}</script><ul class='list'>"+data+"</ul>");      
                 }
             });
-
         });
        function directoryAction(obj){
            var directory = obj.value
+           var dir = obj.id;
            var editDer = directory.replace("./","");
            $('.selectFileAction').css('display','none'); 
-           $(".content-main").html("<button class='btn btn-default'><i class='fa fa-folder-o'></i></button>"+
-                "<button class='btn btn-default' value='"+ directory +"' onclick='addDocument(this);'><i class='fa fa-upload'></i></button>");
-           $(".content-main").append("<h5>"+editDer+"</h5>");
+           $(".content-main").html("<input type='hidden' class='folderDir' value='"+directory+"'><input type='hidden' id='directoryID' value='"+dir+"'><h5>"+editDer+"</h5>");
            $(".content-main").append("<table class='record_table'>"+
            "<thead>"+
            "<tr class='tblHeading'>"+
@@ -341,10 +330,12 @@ $(document).ready(function(){
                         var datestamp = element.datestamp;
                         var fileId = element.id;
                         $(".fileTbody").append("<tr class='clickRow' id='"+ id + "'><td><input id='file"+ id +"' type='hidden' value='"+ fileId +"'>"+
-                        "<input type='checkbox' id='chk"+ id + "' class='form-control checkbox-round'/></td>"+
+                        "<input type='checkbox' id='chk"+ id + "' class='form-control checkbox-round' name='fileSelect' value='"+ fileId +"'/></td>"+
                         "<td><a class='file-action-row'><i class='fa fa-download'></i></a><a class='file-action-row'><i class='fa fa-edit'></i></a></td>"+
                         "<td>"+ fName +"</td><td>"+uploader+"</td><td>"+datestamp+"</td></tr>");
                         id++;
+                        var dirId=$("#directoryID").val();
+                        console.log(dirId);
                     });
                 }
              });
@@ -355,15 +346,15 @@ $(document).ready(function(){
             alert('asjdgs');
            }
        }
+//function for displaying preview of the document//
        $(document).ready(function(){
         $('.content-main').on('click', '.record_table .clickRow', function(event) {
-            $('#properties').css('display','block');
+            $('.rightnav').html("<div id='properties'></div>");
+            $('#properties').css('display','block'); 
             var id = this.id;
             var fileId = $('#file'+id).val();
             console.log(fileId);
-
             var dataString = "fileId=" + fileId + "&displayFileProperty=";
-
             $.ajax({
                 url: "main.php",
                 type: "GET",
@@ -403,16 +394,16 @@ $(document).ready(function(){
                         $('#properties').append("<table class='file-property'><tr><td>File Name:</td><td>"+filename+"</td></tr>"+
                                 "<tr><td>Location:</td><td>"+location+"</td></tr>"+
                                 "<tr><td>Uploader:</td><td>"+uploader+"</td></tr></table>");
-                    });
-
-                    
-                
+                    });                
             }
 
             });
             
        });
     });
+//end of function oreview///////
+
+//function trigger when checkbox is checked
        $(document).ready(function(){
             $('.content-main').on('change','.clickRow input[type=checkbox]', function(){
                 $('#properties').css('display','none');
@@ -421,19 +412,44 @@ $(document).ready(function(){
                     $('.selectFileAction').css('display','none'); 
                 }else{
                     $('.selectFileAction').css('display','block');
-                    $('.selectFileAction').html(countCheckedCheckboxes + " file/s selected<button type='button' class='btn btn-file-action btn-delete' data-toggle='modal' data-target='#exampleModal'><u>DELETE</u></button>"+
+                    $('.selectFileAction').html(countCheckedCheckboxes + " file/s selected<button type='button' class='btn btn-file-action btn-delete' data-toggle='modal' data-target='#deleteModal'><u>DELETE</u></button>"+
                             "<button class='btn btn-file-action'><u>COPY</u></button>"+
-                            "<button class='btn btn-file-action'><u>MOVE</u></button>");
-                   
-                }
-                
+                            "<button class='btn btn-file-action'><u>MOVE</u></button>");   
+                }   
             });
        });
+///////////////////////////////////////////////
+
+//function for deleting selected document
        $(document).ready(function(){
             $("#deleteSelectedFile").on('click',function(){
-                alert('asdajdg');
+                var selectedFile = [];
+                $.each($("input[name='fileSelect']:checked"), function(){            
+                    selectedFile.push($(this).val());
+                });
+                var toBeDeleted = JSON.stringify(selectedFile);
+                var dataString = "selectedFile=" + toBeDeleted + "&deleteSelectedFile=";
+                $("#deleteModal .close").click()
+                $.ajax({
+                    url: "main.php",
+                    type: "GET",
+                    data: dataString,
+                    dataType: "text",
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                    success:function(data){
+                        if (data=='success'){
+                            var dirId=$("#directoryID").val();
+                        }
+
+                    }
+
+                });
+
             });
        });
+////////////////////////////////////////////////////////////////
        
        
        

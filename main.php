@@ -128,26 +128,32 @@
     if(isset($_GET['displayFolderAndFiles'])){
         function listIt($path) {
             $items = scandir($path);
+            $id = 1;
             
             foreach($items as $item) {
-            
+                
                 // Ignore the . and .. folders
                 if($item != "." AND $item != "..") {
                     if (is_file($path . $item)) {
                         // this is the file
-                        echo "<li class='li-file'><i class='fa fa-file-o'></i><a target='_blank' href='".$path.$item."'>".$item."</a></li>";
                     } else {
                         // this is the directory
             
                         // do the list it again!
                         
-                        echo "<li><span class='fa fa-chevron-right caret'></span><button class='btn-der' onclick='directoryAction(this);' value='".$path.$item."/'>".$item."</button>";
+                        echo "<li><span class='fa fa-chevron-right caret'></span><button class='btn-der' id='directory".$id."' onclick='directoryAction(this);' value='".$path.$item."/'>".$item."</button>";
                         echo "<ul class='nested'>";
                         listIt($path . $item . "/");
                         //echo("<input type='text' value='".$path.$item."/'>");
                         echo "</ul></li>"; 
+                        
                     }
+                    $id++;    
                 }
+                
+            
+                
+                
               }
             }
             
@@ -163,6 +169,17 @@
             $fileProperty[]=$row;
             }
             echo json_encode($fileProperty);
+
+    }
+    if(isset($_GET['deleteSelectedFile'])){
+       $fileId = json_decode(stripslashes($_GET['selectedFile']));      
+      
+        foreach($fileId as $f){
+           $query = $conn->query("DELETE FROM files WHERE id='$f'");
+        }
+        if($query){
+            echo('success');
+        }
 
     }
 ?>

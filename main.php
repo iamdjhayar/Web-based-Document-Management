@@ -141,7 +141,7 @@
             
                         // do the list it again!
                         
-                        echo "<li><span class='fa fa-chevron-right caret'></span><button class='btn-der' id='directory".$id."' onclick='directoryAction(this);' value='".$path.$item."/'>".$item."</button>";
+                        echo "<li><span class='fa fa-chevron-right caret'></span><button class='btn-der' onclick='directoryAction(this);' value='".$path.$item."/'>".$item."</button>";
                         echo "<ul class='nested'>";
                         listIt($path . $item . "/");
                         //echo("<input type='text' value='".$path.$item."/'>");
@@ -150,10 +150,6 @@
                     }
                     $id++;    
                 }
-                
-            
-                
-                
               }
             }
             

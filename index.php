@@ -1,7 +1,12 @@
 </<!DOCTYPE html>
 <html>
 <head>
-    <?php include('inc/link.html'); ?>
+    <?php include('inc/link.html');
+        include('main.php');
+        if(isset($_SESSION['userdata'])){
+            header("location:home.php");
+        }
+    ?>
 </head>
 <body class='login'>
     <center>
@@ -20,8 +25,6 @@
                 </div>
                 <p id='errorMsg'></p>
                 <p>Forgot Password or Username? Please Contact System Administrator</p>
-
-
 </form>
         </div>
 </center>    

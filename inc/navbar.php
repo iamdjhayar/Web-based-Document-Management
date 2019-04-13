@@ -31,16 +31,10 @@
       <li class="nav-item navbtn">
         <a class="nav-link"  onclick="addNote();" href="#"><i class="fa fa-sticky-note-o navlink"></i><span class="sr-only">(current)</span></a>
     </li>
-    <li class="nav-item dropdown navbtn">
-      <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        <i class="fa fa-cog navlink"></i>
-      </a>
-      <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-        <a class="dropdown-item" href="#" onclick="manageUsers();">Manage User</a>
-        <div class="dropdown-divider"></div>
-        <a class="dropdown-item" href="#">Something else here</a>
-      </div>
-    </li>
+    <li class="nav-item navbtn">
+        <a class="nav-link" href="#" data-toggle="modal" data-target=".bd-example-modal-lg"><i class="fa fa-cog navlink"></i><span class="sr-only">(current)</span></a>
+        <?php include("inc/settingsModal.html") ?>    
+      </li>
     </ul>
 
     

@@ -509,4 +509,9 @@ button.navbar-toggler-icon{
 #exampleModal{
     border-radius: 0;
 }
+/*control Panel*/
+.ctrlPanel{
+    border-right:1px solid lightgray
+}
+/*////////////////*/
 

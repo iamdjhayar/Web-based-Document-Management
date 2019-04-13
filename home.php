@@ -9,7 +9,7 @@
     <div class="container-fluid">
     <div class="row">
     <div class="col-lg-2 sidenav">
-        <button class='btn btn-warning w-100' onclick="addDocument();">NEW FILE</button>
+        <button class='btn btn-warning w-100' type="button" data-toggle="modal" data-target="#uploadModal">NEW FILE</button>
         <div class='btn-spacing'></div>
         <button class='btn btn-info w-100'>NEW FOLDER</button>
         <hr>
@@ -24,13 +24,15 @@
     <div class="col-lg-3 rightnav">
         <div class="rightnav-action">
         </div>
-       <div id="properties">
-            
+       <div id="properties">   
         </div>     
     </div>
     </div>
     </div>
-    <?php include('inc/deleteModal.html') ?>
+    <?php 
+    include('inc/deleteModal.html');
+    include('inc/uploadModal.html'); 
+    ?>
 </body>
 
 </html>

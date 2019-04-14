@@ -513,5 +513,10 @@ button.navbar-toggler-icon{
 .ctrlPanel{
     border-right:1px solid lightgray
 }
+@media (min-width: 1200px){
+    .modal-xlg{
+        width: 90%;
+    }
+}
 /*////////////////*/
 

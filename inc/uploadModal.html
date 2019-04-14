@@ -8,22 +8,27 @@
           </button>
         </div>
         <div class="modal-body">
+            <div class="uploadFilesChoices">
             <ul class="nav nav-tabs">
                 <li class="nav-item">
-                  <a class="nav-link active" href="#">Bulk/Single Upload</a>
+                  <a class="nav-link active" href="#" id="bulkSingle">Bulk/Single Upload</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="#">Folder Upload</a>
+                  <a class="nav-link" href="#" id="folder">Folder Upload</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="#">Multi-page Upload</a>
+                  <a class="nav-link" href="#"id="multiPage">Multi-page Upload</a>
                 </li>
               </ul>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Save changes</button>
-        </div>
+              <script>var directory=$(".folderDir").val();</script>
+              <div class="uploadType">
+              <form class='dragDrop' method='POST' id='document' enctype='multipart/form-data'>
+                <input type='file' name='fileDocument' multiple>
+                <p>Drag your files here or click in this area.</p>
+                <input type='hidden' id='file_directory' name='fileDirectory' value="'"+ directory + "'">
+              </form>
+              </div>
+            </div>
       </div>
     </div>
   </div>

@@ -450,6 +450,67 @@ $(document).ready(function(){
             });
        });
 ////////////////////////////////////////////////////////////////
+//folder Upload//
+$(document).ready(function(){
+    $('.modal-body').on('click', '#folder', function(event) {
+        $(".uploadType").html("Folder Upload");
+    });
+});
+
+$(document).ready(function(){
+    $('.modal-body').on('click', '#bulkSingle', function(event) {
+        $(".uploadType").html("<form class='dragDrop' method='POST' id='document' enctype='multipart/form-data'>"+
+        "<input type='file' name='fileDocument' multiple>"+
+        "<p>Drag your files here or click in this area.</p>"+
+        "<input type='hidden' id='file_directory' name='fileDirectory' value='directory'>"+
+      "</form>");
+    });
+});
+
+$(document).ready(function(){
+    $('.modal-body').on('click', '#multiPage', function(event) {
+        $(".uploadType").html("Multi Page");
+    });
+});
+////////////////////////////////////////////
+//contro Panel/////
+//This will be loaded first when control panel is opened/////////////
+var userList = "<button class='btn btn-default btnAddUser'>Add New</button>"+
+                    "<table class='table'>"+
+                    "<thead>"+
+                    "<tr>"+
+                        "<th scope='col'>#</th>"+
+                        "<th scope='col'>First Name</th>"+
+                        "<th scope='col'>Last Name</th>"+
+                        "<th scope='col'>Username</th>"+
+                    "</tr>"+
+                    "</thead>"+
+                    "<tbody>"+
+                    "<tr>"+
+                        "<th scope='row'>1</th>"+
+                        "<td>Mark</td>"+
+                        "<td>Otto</td>"+
+                        "<td>@mdo</td>"+
+                    "</tr>"+
+                    "</tbody>"+
+                    "</table>";
+$(document).ready(function(){
+    $('.navPill').html("<a class='flex-sm-fill text-sm-center nav-link userList' href='#'>Users</a>");
+    $('.mainPillCon').html(userList);
+})
+//////////////////////////////////////////////////////////////////
+$(document).ready(function(){
+    $('.ctrlPanelSettings').on('click','.btnAddUser',function(event){
+        $('.navPill').append("<a class='flex-sm-fill text-sm-center nav-link addUserPill' href='#'>Add User</a>");
+        $('.mainPillCon').html("");
+    });
+});
+$(document).ready(function(){
+    $('.ctrlPanelSettings').on('click','.userList',function(event){
+        $('.mainPillCon').html(userList);
+    });
+});
+
        
        
        

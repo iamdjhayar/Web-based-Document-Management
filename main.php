@@ -62,27 +62,24 @@
             }
             echo json_encode($files);
     }
-    if(isset($_POST['tempFileName'])){
-        $new_name=$_POST['fileName'];
-        $file="";
-        if(strlen($new_name)>0){
-            $name=$_FILES['fileDocument']['name'];
-            $ext=end((explode(".",$name)));
-            $file = $new_name.".".$ext;
-        }else{
-            $file=$_FILES['fileDocument']['name'];
-        }
-        
+    if(isset($_POST['fileDirectory'])){
         $directory=$_POST['fileDirectory'];
-        $uploader='admin';
-            
-			$file_loc = $_FILES['fileDocument']['tmp_name'];
+        $uploader=$_SESSION['userdata']['username'];
+        
+        for($i=0;$i<count($_FILES["fileDocument"]["name"]);$i++){
+            $file=$_FILES['fileDocument']['name'][$i];
+            $size=$_FILES['fileDocument']['size'][$i];
+            $size=$size/1000000;
+            $file_loc = $_FILES['fileDocument']['tmp_name'][$i];
 			$new_file_name = strtolower($file);
 			move_uploaded_file($file_loc,$directory.$new_file_name);
-        $query=$conn->query("INSERT INTO files(namef,uploader,location) VALUES ('$new_file_name','$uploader','$directory')") or die($conn->error()); 
-            if($query){
-                echo('success');
-            } 
+            $query=$conn->query("INSERT INTO files(namef,uploader,location,size) VALUES ('$new_file_name','$uploader','$directory','$size')") or die($conn->error()); 
+    }
+    if($query){
+        echo('success');
+    } 
+	exit();
+        
     }
     if(isset($_GET['getFileProperties'])){
         $id=$_GET['fileId'];
@@ -177,5 +174,17 @@
             echo('success');
         }
 
+    }
+    if(isset($_POST['addnote'])){
+        $content=$_POST['note'];
+        $author=$_SESSION['userdata']['id'];
+
+        $query = $conn->query("INSERT INTO note(content,author) VALUES ('$content','$author')");
+        if($query){
+            echo('success');
+        }
+        else{
+            echo('failed');
+        }
     }
 ?>

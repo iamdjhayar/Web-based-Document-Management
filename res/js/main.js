@@ -15,7 +15,7 @@ $(document).ready(function(){
            "<button class='table-action'><i class='fa fa-trash'></i></button>"+
            "<button class='table-action' id='chkToggle' onclick='chkToggle();'><i class='fa fa-check-square-o'></i></button>"+
            "</p></div>"+
-           "<table class='table table-hover w-100'>"+
+           "<table class='table table-hover table-fixed w-100'>"+
            "<thead class='fileheader'>"+
                "<tr>"+
                "<th class='check' scope='col'><input type='checkbox' class='form-control'></th>"+
@@ -96,13 +96,6 @@ $(document).ready(function(){
           "</div>"+
         "</div>"+
           "</form>");
-
-          $(document).ready(function(){
-            $(".dragDrop input[type='file'").change(function (e) {
-                var fileName = e. target. files[0]. name;
-              $('.dragDrop p').html(this.files.length + " file(s) selected<br><input type='text' class='form-control' name='tempFileName' value='"+ fileName +"' readonly>");
-            });
-          });
         }
 
         function closeFileAction(){
@@ -159,64 +152,6 @@ $(document).ready(function(){
             
             
         }
-        $(function () {
-            $(document).on('submit', '#document', function (e) {
-                var directory = $('#file_directory').val();
-                e.preventDefault();  
-                $.ajax({
-                    url: "/main.php",   	// Url to which the request is send
-                    type: "POST",      				// Type of request to be send, called as method
-                    data:  new FormData(this), 		// Data sent to server, a set of key/value pairs representing form fields and values 
-                    contentType: false,       		// The content type used when sending data to the server. Default is: "application/x-www-form-urlencoded"
-                    cache: false,	
-                    dataType: "text",				// To unable request pages to be cached
-                    processData:false,  			// To send DOMDocument or non processed data file it is set to false (i.e. data should not be in the form of string)
-                    success: function(data)  		// A function to be called if request succeeds
-                    {
-                        $('.rightnav-action').css('display','none'); 
-                        directoryAction(directory);
-                    }	        
-               });
-            });
-        });
-        function displayProperties(obj) {
-            var fileId = obj.value;
-            var dataString = "fileId=" + fileId + "&getFileProperties=";
-            
-            $('.rightnav').html("");
-            $('.rightnav').html("<div id='properties'></div>");
-            
-
-            $.ajax({
-                url: "main.php",
-                type: "GET",
-                data : dataString,
-                dataType: "JSON",
-                contentType: false,
-                cache: false,
-                processData: false,
-                success:function(data){
-                    $.each(data,function(i,prop){
-                        var fName = prop.namef;
-                        var fDesig = prop.designate;
-                        var fDate = prop.datestamp;
-                        var fAddInfo = prop.addinfo;
-                        var fCategory = prop.category;
-                        var fUploader = prop.uploader;
-                        var file = prop.location;
-                        $('#properties').append("<table id='tblProp'><tr><td colspan=2><img width='100%' src='uploads/"+ file +"'></td></tr>"+
-                        "<tr><td id='rightAlign'>File Name: </td><td>"+fName+"</td></tr>"+
-                        "<tr><td id='rightAlign'>Designate: </td><td>"+fDesig+"</td></tr>"+
-                        "<tr><td id='rightAlign'>Additional Info: </td><td>"+fAddInfo+"</td></tr>"+
-                        "<tr><td id='rightAlign'>Date: </td><td>"+fDate+"</td></tr>"+
-                        "<tr><td id='rightAlign'>Category: </td><td>"+fCategory+"</td></tr>"+
-                        "<tr><td id='rightAlign'>Uploader: </td><td>"+fUploader+"</td></tr>"+
-                        "</table><hr>");
-                    });
-
-                }
-            });
-          }
         function removeDocument(obj){
             var fileIdRemove = obj.value;
             var categoryID = obj.id;
@@ -260,9 +195,7 @@ $(document).ready(function(){
                 });
             }
         }
-        function addNote(){
-            $(".rightnav").html("MY NOTES");
-        }
+
         function manageUsers(){
             $('.selectFileAction').css('display','none');  
             $('.content-main').html("<div class='row'><div class='col col-lg-6'><div class='list-of-user'>"+
@@ -308,11 +241,12 @@ $(document).ready(function(){
            "<th align='center' style='padding-bottom:10px'><input type='checkbox' class='form-control checkbox-round'/></th>"+
            "<th></th>"+
            "<th>File Name</th>"+
+           "<th>File Size</th>"+
            "<th>Uploader</th>"+
            "<th>Date Modefied</th>"+
              "</tr>"+
              "</thead>"+
-             "<tbody class='fileTbody'></tbody></table");
+             "<tbody class='fileTbody'></tbody></table>");
             var dataString = "directory=" + directory + "&getFileInDirectory="
              $.ajax({
                 url: "main.php",
@@ -329,10 +263,12 @@ $(document).ready(function(){
                         var uploader = element.uploader;
                         var datestamp = element.datestamp;
                         var fileId = element.id;
+                        var size = element.size;
+                        size = size+"MB";
                         $(".fileTbody").append("<tr class='clickRow' id='"+ id + "'><td><input id='file"+ id +"' type='hidden' value='"+ fileId +"'>"+
                         "<input type='checkbox' id='chk"+ id + "' class='form-control checkbox-round' name='fileSelect' value='"+ fileId +"'/></td>"+
                         "<td><a class='file-action-row'><i class='fa fa-download'></i></a><a class='file-action-row'><i class='fa fa-edit'></i></a></td>"+
-                        "<td>"+ fName +"</td><td>"+uploader+"</td><td>"+datestamp+"</td></tr>");
+                        "<td>"+ fName +"</td><td>"+size+"</td><td>"+uploader+"</td><td>"+datestamp+"</td></tr>");
                         id++;
                         var dirId=$("#directoryID").val();
                         console.log(dirId);
@@ -369,28 +305,30 @@ $(document).ready(function(){
                         var location = file.location;
                         var extension = filename.substr( (filename.lastIndexOf('.') +1) );
                         var uploader = file.uploader;
+                        $('#properties').html("<a class='nav-link docPropBtn' href='#' onclick='maxDoc();'><i class='fa fa-expand'></i></a>");
                         switch(extension) {
                             case 'jpg':
                             case 'png':
                             case 'gif':
-                                $('#properties').html("<iframe scrolling='no' allowtransparency='true' src='"+ location+ filename +"' width='100%'></iframe");
+                                $('#properties').append("<iframe scrolling='no' allowtransparency='true' src='"+ location+ filename +"' width='100%'></iframe");
                             break;                        
                             case 'zip':
                             case 'rar':
-                                $('#properties').html("<div class='file-preview'><i class='fa fa-file-zip-o'</div>");
+                                $('#properties').append("<div class='file-preview'><i class='fa fa-file-zip-o'</div>");
                             break;
                             case 'pdf':
-                                $('#properties').html("<object scrolling='no' data='"+location+filename+"' type='application/pdf'>"+
+                                $('#properties').append("<object scrolling='no' data='"+location+filename+"' type='application/pdf'>"+
                                     "<embed scrolling='no' src='"+location+filename+"' type='application/pdf'/>"+
                                 "</object>");
                             break;
                             case 'docx':
                             case 'doc':
-                                $('#properties').html("<div class='file-preview'><i class='fa fa-file-word-o'></i></div>");
+                                $('#properties').append("<div class='file-preview'><i class='fa fa-file-word-o'></i></div>");
                             break;
                             default:
-                                $('#properties').html("<div class='file-preview'><i class='fa fa-ban'></i></div>");
+                                $('#properties').append("<div class='file-preview'><i class='fa fa-ban'></i></div>");
                         }
+                        
                         $('#properties').append("<table class='file-property'><tr><td>File Name:</td><td>"+filename+"</td></tr>"+
                                 "<tr><td>Location:</td><td>"+location+"</td></tr>"+
                                 "<tr><td>Uploader:</td><td>"+uploader+"</td></tr></table>");
@@ -458,18 +396,75 @@ $(document).ready(function(){
 });
 
 $(document).ready(function(){
-    $('.modal-body').on('click', '#bulkSingle', function(event) {
+    $(document).on('click','.uploadModal',function(event){
+        var directory=$(".folderDir").val();
         $(".uploadType").html("<form class='dragDrop' method='POST' id='document' enctype='multipart/form-data'>"+
-        "<input type='file' name='fileDocument' multiple>"+
+        "<input type='file' name='fileDocument[]' multiple>"+
         "<p>Drag your files here or click in this area.</p>"+
-        "<input type='hidden' id='file_directory' name='fileDirectory' value='directory'>"+
-      "</form>");
+        "<input type='hidden' id='file_directory' name='fileDirectory' value='"+directory+"'>"+
+        "<div class='col-lg-12' id='addFileForm'>"+ 
+            "<div class='file-action'>"+
+        "<button class='btn btn-info w-100 btnUpload'>Upload File/s</button>"+
+    "</form></div></div>");
+    $(document).ready(function(){
+        $(".dragDrop input[type='file'").change(function (e) {
+            var fileName = this.files.length;
+            var totalSize = 0;
+            var i;
+            for (i = 0; i < fileName; ++i) {
+                var fileSize = this.files[i].size / 1024 / 1024;
+                totalSize = totalSize + fileSize;    
+            }  
+          $('.dragDrop p').html(fileName + " file(s) selected [" + totalSize.toFixed(2) + "MB]");
+
+        });
+      });
     });
+});
+
+$(document).ready(function(){
+    $('.modal-body').on('click', '#bulkSingle', function(event) {
+        var directory=$(".folderDir").val();
+        $(".uploadType").html("<form class='dragDrop' method='POST' id='document' enctype='multipart/form-data'>"+
+        "<input type='file' name='fileDocument[]' multiple>"+
+        "<p>Drag your files here or click in this area.</p>"+
+        "<input type='hidden' id='file_directory' name='fileDirectory' value='"+directory+"'>"+
+        "<div class='col-lg-12' id='addFileForm'>"+ 
+            "<div class='file-action'>"+
+        "<button class='btn btn-info w-100 btnUpload'>Upload File/s</button>"+
+    "</form></div></div>");
+    $(document).ready(function(){
+        $(".dragDrop input[type='file'").change(function (e) {
+            var fileName = e. target. files[0]. name;
+          $('.dragDrop p').html(this.files.length + " file(s) selected");
+        });
+      });
+});  
 });
 
 $(document).ready(function(){
     $('.modal-body').on('click', '#multiPage', function(event) {
         $(".uploadType").html("Multi Page");
+    });
+});
+$(function () {
+    $(document).on('submit', '#document', function (e) {
+        var directory = $('#file_directory').val();
+        e.preventDefault();  
+        $.ajax({
+            url: "/main.php",   	// Url to which the request is send
+            type: "POST",      				// Type of request to be send, called as method
+            data:  new FormData(this), 		// Data sent to server, a set of key/value pairs representing form fields and values 
+            contentType: false,       		// The content type used when sending data to the server. Default is: "application/x-www-form-urlencoded"
+            cache: false,	
+            dataType: "text",				// To unable request pages to be cached
+            processData:false,  			// To send DOMDocument or non processed data file it is set to false (i.e. data should not be in the form of string)
+            success: function(data)  		// A function to be called if request succeeds
+            {
+                $('.rightnav-action').css('display','none'); 
+                directoryAction(directory);
+            }	        
+       });
     });
 });
 ////////////////////////////////////////////
@@ -510,6 +505,50 @@ $(document).ready(function(){
         $('.mainPillCon').html(userList);
     });
 });
+///ADD NOTE///
+function addNote(){
+    $(".rightnav").html("MY NOTES<a class='nav-link btnAddNote' href='#' data-toggle='modal' data-target='#addNoteModalLg'><i class='fa fa-plus navlink'></i></a>");
+    $(".rightnav").append("<hr>");
+}
+$(document).ready(function(){
+    $('.btnAdd').on('click',function(event){
+       var note = $('#textAreaNote').val();
+       var noteData = "note=" + note + "&addnote=";
+       console.log(noteData);
+       $.ajax({
+        url: "/main.php",   	
+        type: "POST",      				
+        data:  noteData, 			
+        dataType: "text",						
+        success: function(data)  		
+        {
+            console.log("note successfully added!");
+        }	    
+        });
+    });
+});
+//fetch notes in the database
+$(document).ready(function(){
+    $.ajax({
+        url: "/main.php",   	
+        type: "GET",      				
+        data:  noteData, 			
+        dataType: "text",						
+        success: function(data)  		
+        {
+            
+        }	    
+        });
+});
+//maximize document
+function maxDoc() {
+    document.getElementById("maxDocument").style.display = "block";
+  }
+  
+  function minDoc() {
+    document.getElementById("maxDocument").style.display = "none";
+  }
+
 
        
        

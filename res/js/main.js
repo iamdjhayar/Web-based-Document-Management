@@ -207,35 +207,11 @@ $(document).ready(function(){
                     "<select class='form-control addUser'><option value='admin'>ADMIN</option><option value='staff'>STAFF</option></select>"+
                     "<button class='btn btn-success w-100'>ADD USER</button></form></div></div>");
         }
-        $(document).ready(function(){
-            var dataString = "displayFolderAndFiles=";
-            $.ajax({
-                url: "main.php",
-                type: "GET",
-                data: dataString,
-                dataType: "html",
-                contentType: false,
-                cache: false,
-                processData: false,
-                success:function(data){
-                    $('#fieldCategory').append("<script>var toggler = document.getElementsByClassName('caret');"+
-                    "var i;"+
-                    "for (i = 0; i < toggler.length; i++) {"+
-                      "toggler[i].addEventListener('click', function() {"+
-                        "this.parentElement.querySelector('.nested').classList.toggle('active');"+
-                        "this.classList.toggle('caret-down');"+
-                      "});"+
-                    "}</script><ul class='list'>"+data+"</ul>");      
-                }
-            });
-        });
-       function directoryAction(obj){
-           var directory = obj.value
-           var dir = obj.id;
-           var editDer = directory.replace("./","");
-           $('.selectFileAction').css('display','none'); 
-           $(".content-main").html("<input type='hidden' class='folderDir' value='"+directory+"'><input type='hidden' id='directoryID' value='"+dir+"'><h5>"+editDer+"</h5>");
-           $(".content-main").append("<table class='record_table'>"+
+        
+       function directoryAction(){
+           var directory=$('#folderCategory').val();
+           $(".content-main").html("<div id='breadCrumb'></div>");
+           $(".content-main").append("<div class='tableFixHead id='style-1'><table class='record_table'>"+
            "<thead>"+
            "<tr class='tblHeading'>"+
            "<th align='center' style='padding-bottom:10px'><input type='checkbox' class='form-control checkbox-round'/></th>"+
@@ -246,7 +222,7 @@ $(document).ready(function(){
            "<th>Date Modefied</th>"+
              "</tr>"+
              "</thead>"+
-             "<tbody class='fileTbody'></tbody></table>");
+             "<tbody class='fileTbody'></tbody></table></div>");
             var dataString = "directory=" + directory + "&getFileInDirectory="
              $.ajax({
                 url: "main.php",
@@ -305,20 +281,20 @@ $(document).ready(function(){
                         var location = file.location;
                         var extension = filename.substr( (filename.lastIndexOf('.') +1) );
                         var uploader = file.uploader;
-                        $('#properties').html("<a class='nav-link docPropBtn' href='#' onclick='maxDoc();'><i class='fa fa-expand'></i></a>");
+                        //$('#properties').html("<a class='nav-link docPropBtn' href='#' onclick='maxDoc();'><i class='fa fa-expand'></i></a>");
                         switch(extension) {
                             case 'jpg':
                             case 'png':
                             case 'gif':
-                                $('#properties').append("<iframe scrolling='no' allowtransparency='true' src='"+ location+ filename +"' width='100%'></iframe");
+                                $('#properties').append("<a href='document_preview.php?location=./My Files/"+ filename +"' target='_blank'><img src='./My Files/"+ filename +"' width='100%'/></a>");
                             break;                        
                             case 'zip':
                             case 'rar':
                                 $('#properties').append("<div class='file-preview'><i class='fa fa-file-zip-o'</div>");
                             break;
                             case 'pdf':
-                                $('#properties').append("<object scrolling='no' data='"+location+filename+"' type='application/pdf'>"+
-                                    "<embed scrolling='no' src='"+location+filename+"' type='application/pdf'/>"+
+                                $('#properties').append("<object scrolling='no' data='./My Files/"+filename+"' type='application/pdf'>"+
+                                    "<embed scrolling='no' src='./My Files/"+filename+"' type='application/pdf'/>"+
                                 "</object>");
                             break;
                             case 'docx':
@@ -397,11 +373,11 @@ $(document).ready(function(){
 
 $(document).ready(function(){
     $(document).on('click','.uploadModal',function(event){
-        var directory=$(".folderDir").val();
+        var directory=$("#folderCategory").val();
         $(".uploadType").html("<form class='dragDrop' method='POST' id='document' enctype='multipart/form-data'>"+
         "<input type='file' name='fileDocument[]' multiple>"+
         "<p>Drag your files here or click in this area.</p>"+
-        "<input type='hidden' id='file_directory' name='fileDirectory' value='"+directory+"'>"+
+        "<input type='hidden' id='file_directory' name='folderCategory' value='"+directory+"'>"+
         "<div class='col-lg-12' id='addFileForm'>"+ 
             "<div class='file-action'>"+
         "<button class='btn btn-info w-100 btnUpload'>Upload File/s</button>"+
@@ -424,11 +400,11 @@ $(document).ready(function(){
 
 $(document).ready(function(){
     $('.modal-body').on('click', '#bulkSingle', function(event) {
-        var directory=$(".folderDir").val();
+        var directory=$("#folderCategory").val();
         $(".uploadType").html("<form class='dragDrop' method='POST' id='document' enctype='multipart/form-data'>"+
         "<input type='file' name='fileDocument[]' multiple>"+
         "<p>Drag your files here or click in this area.</p>"+
-        "<input type='hidden' id='file_directory' name='fileDirectory' value='"+directory+"'>"+
+        "<input type='hidden' id='file_directory' name='folderCategory' value='"+directory+"'>"+
         "<div class='col-lg-12' id='addFileForm'>"+ 
             "<div class='file-action'>"+
         "<button class='btn btn-info w-100 btnUpload'>Upload File/s</button>"+
@@ -544,10 +520,95 @@ $(document).ready(function(){
 function maxDoc() {
     document.getElementById("maxDocument").style.display = "block";
   }
-  
-  function minDoc() {
+function minDoc() {
     document.getElementById("maxDocument").style.display = "none";
   }
+//fetch list of folder/category
+$(document).ready(function(){ 
+    //fill data to tree  with AJAX call
+    $('#fieldCategory').jstree({
+        'core' : {
+      'data' : {
+              'url' : 'main.php?operation=get_node',
+              'data' : function (node) {
+                return { 'id' : node.id };
+              },
+              "dataType" : "json"
+            }
+            ,'check_callback' : true,
+            'themes' : {
+              'responsive' : false
+            }
+      },
+      'plugins' : ['state','contextmenu','wholerow']
+    }).on('create_node.jstree', function (e, data) {     
+        $.get('main.php?operation=create_node', { 'id' : data.node.parent, 'position' : data.position, 'text' : data.node.text })
+          .done(function (d) {
+            data.instance.set_id(data.node, d.id);
+          })
+          .fail(function () {
+            data.instance.refresh();
+          });
+        }).on('rename_node.jstree', function (e, data) {
+            $.get('main.php?operation=rename_node', { 'id' : data.node.id, 'text' : data.text })
+              .fail(function () {
+                data.instance.refresh();
+              });
+          }).on('delete_node.jstree', function (e, data) {
+            $.get('main.php?operation=delete_node', { 'id' : data.node.id })
+              .fail(function () {
+                data.instance.refresh();
+              });
+        });
+});
+$(document).ready(function(){
+    $('#fieldCategory')
+  // listen for event
+  .on('changed.jstree', function (e, data) {
+      e.preventDefault();
+    var i, j, r = [];
+    for(i = 0, j = data.selected.length; i < j; i++) {
+      r.push(data.instance.get_node(data.selected[i]).text);
+    }
+    $('#folderCategory').val(r);
+    var folder=$('#folderCategory').val();
+    directoryAction();
+    $('#breadCrumb').append("<h5>"+folder+"</h5>");
+  })
+  // create the instance
+  .jstree();
+})
+
+//for image processing
+
+function brightness(){
+    var brValue=$('#formControlBr').val();
+    $('.brightnessValue').html(brValue);
+}
+function contrast(){
+    var conValue=$('#formControlCon').val();
+    $('.contrastValue').html(conValue);
+}
+$(document).ready(function(){
+    const canvas = document.getElementById('imgCanvas');
+    const cts = canvas.getContext('2d');
+    let img = new Image();
+
+    img = new Image();
+    img.src="./My Files/img_20190311_141458.jpg";
+    
+    img.onload = function () {
+    canvas.width=img.width;
+    canvas.height=img.height;
+    ctx.drawImage(img,0,0,img.width,img.height);
+    canvas.removeAttribute('data-caman-id');
+    };
+});
+
+  
+  
+  
+  
 
 
        

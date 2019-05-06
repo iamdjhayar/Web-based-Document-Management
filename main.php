@@ -46,10 +46,7 @@
             $_SESSION['userdata']=mysqli_fetch_assoc($query) or die(mysqli_error($conn));
             exit('success');
         }else
-            exit('failed');
-        
-             
-           
+            exit('failed');      
     }
     if(isset($_GET['getFiles'])){ 
             
@@ -62,10 +59,10 @@
             }
             echo json_encode($files);
     }
-    if(isset($_POST['fileDirectory'])){
-        $directory=$_POST['fileDirectory'];
+    if(isset($_POST['folderCategory'])){
+        $folder=$_POST['folderCategory'];
         $uploader=$_SESSION['userdata']['username'];
-        
+        $directory="./My Files/";
         for($i=0;$i<count($_FILES["fileDocument"]["name"]);$i++){
             $file=$_FILES['fileDocument']['name'][$i];
             $size=$_FILES['fileDocument']['size'][$i];
@@ -73,7 +70,7 @@
             $file_loc = $_FILES['fileDocument']['tmp_name'][$i];
 			$new_file_name = strtolower($file);
 			move_uploaded_file($file_loc,$directory.$new_file_name);
-            $query=$conn->query("INSERT INTO files(namef,uploader,location,size) VALUES ('$new_file_name','$uploader','$directory','$size')") or die($conn->error()); 
+            $query=$conn->query("INSERT INTO files(namef,uploader,location,size) VALUES ('$new_file_name','$uploader','$folder','$size')") or die($conn->error()); 
     }
     if($query){
         echo('success');
@@ -119,39 +116,6 @@
             }
             echo json_encode($file_in_directory);
     }
-    
-    
-
-    if(isset($_GET['displayFolderAndFiles'])){
-        function listIt($path) {
-            $items = scandir($path);
-            $id = 1;
-            
-            foreach($items as $item) {
-                
-                // Ignore the . and .. folders
-                if($item != "." AND $item != "..") {
-                    if (is_file($path . $item)) {
-                        // this is the file
-                    } else {
-                        // this is the directory
-            
-                        // do the list it again!
-                        
-                        echo "<li><span class='fa fa-chevron-right caret'></span><button class='btn-der' onclick='directoryAction(this);' value='".$path.$item."/'>".$item."</button>";
-                        echo "<ul class='nested'>";
-                        listIt($path . $item . "/");
-                        //echo("<input type='text' value='".$path.$item."/'>");
-                        echo "</ul></li>"; 
-                        
-                    }
-                    $id++;    
-                }
-              }
-            }
-            
-            listIt("./My Files/");
-    }
     if(isset($_GET['displayFileProperty'])){
         $fileId = $_GET['fileId'];
 
@@ -187,4 +151,76 @@
             echo('failed');
         }
     }
+    //display list of folder/category
+    if(isset($_GET['operation'])) {
+        try {
+          $result = null;
+          switch($_GET['operation']) {
+            case 'get_node':
+              $node = isset($_GET['id']) && $_GET['id'] !== '#' ? (int)$_GET['id'] : 0;
+              $sql = "SELECT * FROM `folder` ";
+              $res = mysqli_query($conn, $sql) or die("database error:". mysqli_error($conn));
+                //iterate on results row and create new index array of data
+                while( $row = mysqli_fetch_assoc($res) ) { 
+                  $data[] = $row;
+                }
+                $itemsByReference = array();
+       
+              // Build array of item references:
+              foreach($data as $key => &$item) {
+                 $itemsByReference[$item['id']] = &$item;
+                 // Children array:
+                 $itemsByReference[$item['id']]['children'] = array();
+                 // Empty data class (so that json_encode adds "data: {}" ) 
+                 $itemsByReference[$item['id']]['data'] = new StdClass();
+              }
+       
+              // Set items as children of the relevant parent item.
+              foreach($data as $key => &$item)
+                 if($item['parent_id'] && isset($itemsByReference[$item['parent_id']]))
+                  $itemsByReference [$item['parent_id']]['children'][] = &$item;
+       
+              // Remove items that were added to parents elsewhere:
+              foreach($data as $key => &$item) {
+                 if($item['parent_id'] && isset($itemsByReference[$item['parent_id']]))
+                  unset($data[$key]);
+              }
+              $result = $data;
+              break;
+            case 'create_node':
+              $node = isset($_GET['id']) && $_GET['id'] !== '#' ? (int)$_GET['id'] : 0;
+              
+              $nodeText = isset($_GET['text']) && $_GET['text'] !== '' ? $_GET['text'] : '';
+              $sql ="INSERT INTO `folder` (`name`, `text`, `parent_id`) VALUES('".$nodeText."', '".$nodeText."', '".$node."')";
+              mysqli_query($conn, $sql);
+              
+              $result = array('id' => mysqli_insert_id($conn));
+       
+              break;
+            case 'rename_node':
+              $node = isset($_GET['id']) && $_GET['id'] !== '#' ? (int)$_GET['id'] : 0;
+              //print_R($_GET);
+              $nodeText = isset($_GET['text']) && $_GET['text'] !== '' ? $_GET['text'] : '';
+              $sql ="UPDATE `folder` SET `name`='".$nodeText."',`text`='".$nodeText."' WHERE `id`= '".$node."'";
+              mysqli_query($conn, $sql);
+              break;
+            case 'delete_node':
+              $node = isset($_GET['id']) && $_GET['id'] !== '#' ? (int)$_GET['id'] : 0;
+              $sql ="DELETE FROM `folder` WHERE `id`= '".$node."'";
+              mysqli_query($conn, $sql);
+              break;
+            default:
+              throw new Exception('Unsupported operation: ' . $_GET['operation']);
+              break;
+          }
+          header('Content-Type: application/json; charset=utf-8');
+          echo json_encode($result);
+        }
+        catch (Exception $e) {
+          header($_SERVER["SERVER_PROTOCOL"] . ' 500 Server Error');
+          header('Status:  500 Server Error');
+          echo $e->getMessage();
+        }
+        die();
+      }
 ?>

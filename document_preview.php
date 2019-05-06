@@ -1,6 +1,3 @@
-<?php
-    $location=$_GET['location'];
-?>
 <html>
     <head>
         <?php
@@ -11,19 +8,21 @@
 <body>
 <div class="container-fluid docPreviewContainer">
     <div class="row">
-        <div class="col-lg-4 docSettings">
+        <div class="col-lg-3 docSettings">
             <form>
             <div class="form-group">
+                <h4>Process Image/Document</h4>
                 <label for="formControlBr">Brightness</label>
-                <input type="range" class="form-control-range" id="formControlBr" min="-100" max="100" step="1" value="0" onchange="brightness();">
+                <input type="range" class="form-control-range formControlBr" min="-100" max="100" step="1">
                 <div class="brightnessValue"></div>
                 <label for="formControlRange">Contrast</label>
-                <input type="range" class="form-control-range" id="formControlCon" min="-100" max="100" step="1" value="0" onchange="contrast();">
+                <input type="range" class="form-control-range formControlCon" min="-100" max="100" step="1">
                 <div class="contrastValue"></div>
             </div>
             </form>
+            <button class="btn btn-success saveDocBtn">SAVE</button>
         </div>
-        <div class="col-lg-8 docPreview">
+        <div class="col-lg-9 docPreview">
             <div class="imgDocument">
             <canvas id="imgCanvas"></canvas>
             </div>  
@@ -31,5 +30,6 @@
     </div>
 </div>
 </body>
-
+<script type="text/javascript" src="res/js/caman/caman.full.min.js"></script>
+<script type="text/javascript" src="res/js/caman/caman.min.js"></script>
 </html>

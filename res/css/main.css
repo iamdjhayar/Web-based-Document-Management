@@ -636,7 +636,7 @@ th     { background:#eee; }
 }
 .docSettings{
     height:100%;
-    padding:5% 20px 20px 20px;
+    padding:6% 20px 20px 20px;
 }
 .docPreview{
     padding-top:5%;
@@ -655,4 +655,7 @@ th     { background:#eee; }
 #imgCanvas{
     width:100%;
     background-color:lightgray;
+}
+.saveDocBtn{
+    float:right;
 }

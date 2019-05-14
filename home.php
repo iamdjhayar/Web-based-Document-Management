@@ -18,7 +18,7 @@
         <div id="fieldCategory"></div>
         <ul class="nav flex-column">
         <li>
-            <a class="" href="#"><i class='fa fa-trash-o recBin'></i>Recycle Bin</a>
+            <a class="recycleBin" href="#"><i class='fa fa-trash-o recBin'></i>Recycle Bin</a>
         </li>
         </ul>
         <div id="categories"></div>
@@ -30,6 +30,7 @@
         <input type="hidden" id="folderCategory">
         </div>
     <div class="col-lg-3 rightnav">
+            <div id="ocr"></div>
         <div class="rightnav-action">
         </div>
        <div id="properties">   
@@ -38,7 +39,7 @@
     <footer class='fixed-bottom'> 
     <div class='row'>
     <div class='col-lg-2'></div>
-    <div class='col-lg-7 footerCenter'>
+    <!--<div class='col-lg-7 footerCenter'>
         <nav aria-label="Page navigation example">
         <ul class="pagination justify-content-end">
             <li class="page-item disabled">
@@ -52,18 +53,21 @@
             </li>
         </ul>
         </nav>
-    </div>
+    </div>-->
     <div class='col-lg-3'></div>
         </div>
         </div>
     </div>
     </div>
     
+    
     </div>
     <?php 
     include('inc/deleteModal.html');
     include('inc/addNoteModal.html');
     include('inc/uploadModal.html'); 
+    include("inc/settingsModal.html");
+    include("inc/recoverModal.html")
     ?>
 </body>
 </html>

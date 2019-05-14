@@ -5,72 +5,6 @@ $(document).ready(function(){
         "<div class='col col-lg-4 user-count'>+1000</div></div></div><hr>");
 
 });
-     function displayFiles(obj){
-        var idCategory = obj.value;
-        var catId=obj.id;
-        $('#properties').html('');//Empty properties DIV content and element
-           $('.centercon').html('');
-           $('.centercon').html("<div><p class='category'>"+ idCategory +
-           "<button class='table-action' id='"+ catId +"' value='"+ idCategory +"' onclick='addDocument(this);'><i class='fa fa-plus'></i></button>"+
-           "<button class='table-action'><i class='fa fa-trash'></i></button>"+
-           "<button class='table-action' id='chkToggle' onclick='chkToggle();'><i class='fa fa-check-square-o'></i></button>"+
-           "</p></div>"+
-           "<table class='table table-hover table-fixed w-100'>"+
-           "<thead class='fileheader'>"+
-               "<tr>"+
-               "<th class='check' scope='col'><input type='checkbox' class='form-control'></th>"+
-               "<th scope='col'>Name</th>"+
-               "<th scope='col'>Designate</th>"+
-               "<th scope='col'>Additional Info</th>"+
-               "<th scope='col'>Date</th>"+
-               "<th scope='col'></th>"+
-               "</tr>"+
-           "</thead>"+
-           "<tbody id='tbbody'>"+    
-           "</tbody>"+
-           "</table>");
-        var dataString="category="+idCategory+"&getFiles=";
-        console.log(dataString);
-           if($.trim(idCategory).length>0){
-               $.ajax({
-                   url: "main.php",
-                   type: "GET",
-                   data: dataString,
-                   contentType: false,       		// The content type used when sending data to the server. Default is: "application/x-www-form-urlencoded"
-                    cache: false,	
-                    dataType: "json",			// To unable request pages to be cached
-                    processData:false,  			// To send DOMDocument or non processed data file it is set to false (i.e. data should not be in the form of string)
-                    success: function(data){ 
-                        $.each(data, function(i, element) {
-                            var fileId=element.id;
-                            var fileName=element.namef;
-                            var date=element.datestamp;
-                            var designate=element.designate;
-                            var addinfo=element.addinfo;
-                            var fileCategory=element.category;
-                            $('#tbbody').append("<tr>"+
-                            "<td class='check' scope='row'><input type='checkbox' class='form-control'></td>"+
-                            "<td>"+fileName+"</td>"+
-                            "<td>"+designate+"</td>"+
-                            "<td>"+addinfo+"</td>"+
-                            "<td>"+ date +"</td>"+
-                            "<td><div id='drp-menu' class='dropdown show'>"+
-                            "<button class='btn btn-secondary dropdown-toggle' href='#' role='button' id='dropdownMenuLink'"+
-                            "data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'></button>"+
-                            "<div class='dropdown-menu dropdown-menu-right' aria-labelledby='dropdownMenuLink'>"+
-                              "<input type='hidden' id='fileCategory' value='"+fileCategory+"'>"+
-                              "<button onclick='displayProperties(this);' value='"+ fileId +"' class='dropdown-item' href='#'><i class='fa fa-list'></i> Properties</button>"+
-                              "<button class='dropdown-item' href='#'><i class='fa fa-pencil-square-o'></i> Update Properties</button>"+
-                              "<button onclick='removeDocument(this);' id='"+ catId +"' value='"+ fileId +"' class='dropdown-item' href='#'><i class='fa fa-trash-o'></i> Remove Document</button></div></div></td>"+
-                            "</tr>");	 
-                        }); 
-                }
-               });
-           }
-        }
-    function sample(){
-        alert('jsdhgfdshf');
-    }
     function hideRNavAction() {
         $('.rightnav-action').css('display','none');
       }
@@ -188,10 +122,9 @@ $(document).ready(function(){
                     success:function(data){
                         $.each(data,function(i,file){
                             var fileName=file.namef;
-                            $('#properties').append(fileName+"<br>");
+                            $('#properties').append("<a href='document_preview.php?location=./My Files/"+ fileName +"' target='_blank'>"+ fileName+"</a><br>");
                         });   
                     }
-
                 });
             }
         }
@@ -207,10 +140,34 @@ $(document).ready(function(){
                     "<select class='form-control addUser'><option value='admin'>ADMIN</option><option value='staff'>STAFF</option></select>"+
                     "<button class='btn btn-success w-100'>ADD USER</button></form></div></div>");
         }
-        
+
+        function columnView(){
+            $(".content-main").html("<div class='searchForm'><i class='fa fa-th list-view' onclick='columnView();'></i><i class='fa fa-th-list list-view' onclick='directoryAction();'></i><form class='form-inline my-2 my-lg-0 searchInput'>"+
+            "<input class='form-control mr-sm-2' id='searchIDocumentInput' type='search' onkeyup='searchDocument();' placeholder='Search Document...'>"+
+          "</form></div><div id='breadCrumb'></div><hr>");
+        }
+    $(document).ready(function(){
+        $('.content-main').on('click','#customView',function(){
+            var view = $("input[name='customView']:checked").val()
+            if(view=="listview"){
+                $('#breadCrumb').append("ListView");
+            }
+            else if(view=="gridview"){
+                $('#breadCrumb').append("GridView");
+            }
+        });
+    }); 
        function directoryAction(){
            var directory=$('#folderCategory').val();
-           $(".content-main").html("<div id='breadCrumb'></div>");
+           $(".content-main").html("<div class='searchForm'><div class='form-check form-check-inline'>"+
+           "<label class='form-check-label'>"+
+             "<input class='form-check-input' type='radio' name='customView' id='customView' value='listView'> List View </label> </div>"+
+             "<div class='form-check form-check-inline'>"+
+           "<label class='form-check-label'>"+
+             "<input class='form-check-input' type='radio' name='customView' id='customView' value='gridView'> Grid View </label></div>"+
+             "<form class='form-inline my-2 my-lg-3 searchInput'>"+
+             "<input class='form-control mr-sm-2' id='searchIDocumentInput' type='search' onkeyup='searchDocument();' placeholder='Search Document...'>"+
+           "</form></div><div id='breadCrumb'></div>");           
            $(".content-main").append("<div class='tableFixHead id='style-1'><table class='record_table'>"+
            "<thead>"+
            "<tr class='tblHeading'>"+
@@ -243,14 +200,25 @@ $(document).ready(function(){
                         size = size+"MB";
                         $(".fileTbody").append("<tr class='clickRow' id='"+ id + "'><td><input id='file"+ id +"' type='hidden' value='"+ fileId +"'>"+
                         "<input type='checkbox' id='chk"+ id + "' class='form-control checkbox-round' name='fileSelect' value='"+ fileId +"'/></td>"+
-                        "<td><a class='file-action-row'><i class='fa fa-download'></i></a><a class='file-action-row'><i class='fa fa-edit'></i></a></td>"+
+                        "<td><a class='file-action-row'><i class='fa fa-download'></i></a><a class='file-action-row'></a></td>"+
                         "<td>"+ fName +"</td><td>"+size+"</td><td>"+uploader+"</td><td>"+datestamp+"</td></tr>");
                         id++;
-                        var dirId=$("#directoryID").val();
-                        console.log(dirId);
+
+                        function heloIt(){
+                            console.log('shdjfhjf');
+                        }
+
+                        
                     });
                 }
+                
              });
+             $(document).ready(function(){
+                $('.content-main').on('click','.renameFile', function(event) {
+                    event.preventDefault();
+                    alert("sjdhfjdf");
+                });
+            });
        }
        
        function clickRow(event){
@@ -420,9 +388,31 @@ $(document).ready(function(){
 
 $(document).ready(function(){
     $('.modal-body').on('click', '#multiPage', function(event) {
-        $(".uploadType").html("Multi Page");
+        var directory=$("#folderCategory").val();
+        $(".uploadType").html("<form class='dragDrop' method='POST' id='document' enctype='multipart/form-data'>"+
+        "<input type='file' name='fileDocument[]' multiple>"+
+        "<p>Drag your files here or click in this area.(Multi-page)</p>"+
+        "<input type='hidden' id='file_directory' name='folderCategory' value='"+directory+"'>"+
+        "<div class='col-lg-12' id='addFileForm'>"+ 
+            "<div class='file-action'>"+
+        "<button class='btn btn-info w-100 btnUpload'>Upload File/s</button>"+
+    "</form></div></div>");
+    $(document).ready(function(){
+        $(".dragDrop input[type='file'").change(function (e) {
+            var fileName = e. target. files[0]. name;
+          $('.dragDrop p').html(this.files.length + " file(s) selected");
+        });
+      });
     });
 });
+
+$("button").click(function() {
+    $("#test").click();
+})
+
+$('#test').change(function() {
+    $('#test_form').submit();
+})
 $(function () {
     $(document).on('submit', '#document', function (e) {
         var directory = $('#file_directory').val();
@@ -451,9 +441,9 @@ var userList = "<button class='btn btn-default btnAddUser'>Add New</button>"+
                     "<thead>"+
                     "<tr>"+
                         "<th scope='col'>#</th>"+
-                        "<th scope='col'>First Name</th>"+
-                        "<th scope='col'>Last Name</th>"+
                         "<th scope='col'>Username</th>"+
+                        "<th scope='col'>Password</th>"+
+                        "<th scope='col'>Role Type</th>"+
                     "</tr>"+
                     "</thead>"+
                     "<tbody>"+
@@ -465,20 +455,46 @@ var userList = "<button class='btn btn-default btnAddUser'>Add New</button>"+
                     "</tr>"+
                     "</tbody>"+
                     "</table>";
+var navPill = "<nav class='nav nav-pills flex-column flex-sm-row navPill'></nav><hr><div class='mainPillCon'></div>";
+
+$(document).ready(function(){
+    $(".ctrlPanelSettings").html(navPill);
+    $('.navPill').html("<a class='flex-sm-fill text-sm-center nav-link userList' href='#'>Users</a>");
+    $('.mainPillCon').html(userList);
+});
+
 $(document).ready(function(){
     $('.navPill').html("<a class='flex-sm-fill text-sm-center nav-link userList' href='#'>Users</a>");
     $('.mainPillCon').html(userList);
 })
+
+$(document).ready(function(){
+    $('.navPill').html("<a class='flex-sm-fill text-sm-center nav-link userList' href='#'>Users</a>");
+    $('.mainPillCon').html(userList);
+})
+ 
 //////////////////////////////////////////////////////////////////
 $(document).ready(function(){
     $('.ctrlPanelSettings').on('click','.btnAddUser',function(event){
         $('.navPill').append("<a class='flex-sm-fill text-sm-center nav-link addUserPill' href='#'>Add User</a>");
-        $('.mainPillCon').html("");
+        $('.mainPillCon').html("ahsgdhsgd");
     });
 });
 $(document).ready(function(){
     $('.ctrlPanelSettings').on('click','.userList',function(event){
         $('.mainPillCon').html(userList);
+    });
+});
+
+$(document).ready(function(){
+    $(".roleSettings").on('click',function(){
+        $(".ctrlPanelSettings").html("");
+    });
+});
+
+$(document).ready(function(){
+    $(".userSettings").on('click',function(){
+        $(".ctrlPanelSettings").html(navPill);
     });
 });
 ///ADD NOTE///
@@ -573,7 +589,7 @@ $(document).ready(function(){
     $('#folderCategory').val(r);
     var folder=$('#folderCategory').val();
     directoryAction();
-    $('#breadCrumb').append("<h5>"+folder+"</h5>");
+    
   })
   // create the instance
   .jstree();
@@ -599,6 +615,9 @@ $(document).ready(function(){
     };
 
     var imgURL = getUrlParameter('location');
+    $('.documentFileName').html("<h5>"+imgURL+"</h5>");
+
+    $('.docThumb').html("<img width='100%' src='"+ imgURL+"'>")
 
     const canvas = document.getElementById('imgCanvas');
     const ctx = canvas.getContext('2d');
@@ -633,6 +652,164 @@ $(document).ready(function(){
             });
         }
 
+    });
+});
+$(document).ready(function(){
+    (function worker() {
+        var dataString = "getDocumentOCR="; 
+        $.ajax({
+            url: "/main.php",   	
+            type: "GET",      				
+            data:  dataString, 			
+            dataType: "json",						
+            success: function(data)  		
+            {
+                $.each(data,function(i,file){
+                    var fileName = file.namef;
+                    var id = file.id;
+                        fileName = "./My Files/" + fileName;
+
+                        Tesseract.recognize(fileName)
+                        .progress(function(data){
+                            console.log(data)})
+                            .then(function(data){
+                                var ocrResult = data.text;
+                                var finalOcr=ocrResult.replace(/[^a-zA-Z ]/g, "");
+                                documentOCR(id,finalOcr);
+                            })
+                });
+            }	
+        });
+          setTimeout(worker, 1000);
+      })();
+    
+});
+function documentOCR(id,ocrResult){
+    var dataString = "id=" + id + "&ocrResult=" + ocrResult;
+    console.log(ocrResult);
+    $.ajax({
+        url: "/main.php",   	
+        type: "POST",      				
+        data:  dataString, 			
+        dataType: "text",						
+        success: function(data)  		
+        {
+
+        }
+    });
+}
+$(document).ready(function(){
+    var dataString = "logOut=";
+    $('.logOut').on('click',function(){
+        $.ajax({
+            url: "/main.php",   	
+            type: "GET",      				
+            data:  dataString, 			
+            dataType: "json",						
+            success: function(data)  		
+            {
+            }
+        });
+    });
+});
+$(document).ready(function(){ 
+    $('.recycleBin').on('click',function(){
+        $(".content-main").html("<div id='breadCrumb'><h5>Recycle Bin</h5></div>");
+        $(".content-main").append("<div class='tableFixHead id='style-1'><table class='record_table'>"+
+           "<thead>"+
+           "<tr class='tblHeading'>"+
+           "<th align='center' style='padding-bottom:10px'><input type='checkbox' class='form-control checkbox-round'/></th>"+
+           "<th></th>"+
+           "<th>File Name</th>"+
+           "<th>File Size</th>"+
+           "<th>Uploader</th>"+
+           "<th>Date Modefied</th>"+
+             "</tr>"+
+             "</thead>"+
+             "<tbody class='fileTbody'></tbody></table></div>");
+            var dataString = "&getRecycleBin="
+             $.ajax({
+                url: "main.php",
+                type: "GET",
+                data: dataString,
+                dataType: "json",
+                contentType: false,
+                cache: false,
+                processData: false,
+                success:function(data){
+                    var id = 0;
+                    $.each(data,function(i,element){
+                        var fName = element.namef;
+                        var uploader = element.uploader;
+                        var datestamp = element.datestamp;
+                        var fileId = element.id;
+                        var size = element.size;
+                        size = size+"MB";
+                        $(".fileTbody").append("<tr class='clickRowRecover' id='"+ id + "'><td><input id='file"+ id +"' type='hidden' value='"+ fileId +"'>"+
+                        "<input type='checkbox' id='chk"+ id + "' class='form-control checkbox-round' name='fileSelect' value='"+ fileId +"'/></td>"+
+                        "<td><a class='file-action-row'><i class='fa fa-download'></i></a><a class='file-action-row'></a></td>"+
+                        "<td>"+ fName +"</td><td>"+size+"</td><td>"+uploader+"</td><td>"+datestamp+"</td></tr>");
+                        id++;
+
+                        function heloIt(){
+                            console.log('shdjfhjf');
+                        }
+
+                        
+                    });
+                }
+                
+             });
+    });
+});
+$(document).ready(function(){
+    $('.content-main').on('change','.clickRowRecover input[type=checkbox]', function(){
+        $('#properties').css('display','none');
+        var countCheckedCheckboxes = $('.clickRowRecover input[type=checkbox]').filter(':checked').length;
+        if(countCheckedCheckboxes == 0){
+            $('.selectFileAction').css('display','none'); 
+        }else{
+            $('.selectFileAction').css('display','block');
+            $('.selectFileAction').html(countCheckedCheckboxes + " file/s selected<button type='button' class='btn btn-file-action btn-delete' data-toggle='modal' data-target='#recoverModal'><u>RECOVER</u></button>");
+                     
+        }   
+    });
+});
+///////////////////////////////////////////////
+
+//function for deleting selected document
+$(document).ready(function(){
+    $("#recoverSelectedFile").on('click',function(){
+        var selectedFile = [];
+        $.each($("input[name='fileSelect']:checked"), function(){            
+            selectedFile.push($(this).val());
+        });
+        var toBeRecover = JSON.stringify(selectedFile);
+        var dataString = "selectedFile=" + toBeRecover + "&recoverSelectedFile=";
+        $("#recoverModal .close").click()
+        $.ajax({
+            url: "main.php",
+            type: "GET",
+            data: dataString,
+            dataType: "text",
+            contentType: false,
+            cache: false,
+            processData: false,
+            success:function(data){
+                if (data=='success'){
+                    var dirId=$("#directoryID").val();
+                }
+
+            }
+
+        });
+
+    });
+});
+///////////document full view choices//////
+$(document).ready(function(){
+    $(".printDocument").on('click',function(){
+        window.print();
     });
 });
 

@@ -22,11 +22,16 @@
             </form>
             <button class="btn btn-success saveDocBtn">SAVE</button>
         </div>
-        <div class="col-lg-9 docPreview">
+
+        <div class="col-lg-7 docPreview">
             <div class="imgDocument">
             <canvas id="imgCanvas"></canvas>
             </div>  
         </div>
+
+        <div class="col-lg-2">
+            <div class="docThumb"></div>
+        </div>       
     </div>
 </div>
 </body>

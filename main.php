@@ -91,7 +91,7 @@
     if(isset($_GET['removeDocument'])){
         $id=$_GET['fileId'];
 
-        $query=$conn->query("DELETE FROM files WHERE id='$id'") or die($conn->error());
+        $query=$conn->query("UPDATE `files` SET `status`='recycle_bin' WHERE id='$id'");
         
         if($query){
             exit('Success Delete');
@@ -100,7 +100,7 @@
     }
     if(isset($_GET['searchDocument'])){
         $searchInput=$_GET['searchInput'];
-        $query=$conn->query("SELECT * FROM files WHERE namef LIKE '%$searchInput%' OR designate LIKE '%$searchInput%' OR addinfo LIKE'%$searchInput%'");
+        $query=$conn->query("SELECT * FROM files WHERE namef LIKE '%$searchInput%' OR ocrscan LIKE '%$searchInput%'");
         $searchFile=array();
         while($row=$query->fetch_object()){
             $searchFile[]=$row;
@@ -109,7 +109,7 @@
     }
     if(isset($_GET['getFileInDirectory'])){
         $directory=$_GET['directory'];
-        $query=$conn->query("SELECT * FROM files WHERE location='$directory'") or die($conn->error());
+        $query=$conn->query("SELECT * FROM files WHERE location='$directory' AND status='active'") or die($conn->error());
         $file_in_directory=array();
         while($row=$query->fetch_object()){
             $file_in_directory[]=$row;
@@ -132,13 +132,24 @@
        $fileId = json_decode(stripslashes($_GET['selectedFile']));      
       
         foreach($fileId as $f){
-           $query = $conn->query("DELETE FROM files WHERE id='$f'");
+            $query=$conn->query("UPDATE `files` SET `status`='recycle_bin' WHERE id='$f'");
         }
         if($query){
             echo('success');
         }
 
     }
+    if(isset($_GET['recoverSelectedFile'])){
+        $fileId = json_decode(stripslashes($_GET['selectedFile']));      
+       
+         foreach($fileId as $f){
+             $query=$conn->query("UPDATE `files` SET `status`='active' WHERE id='$f'");
+         }
+         if($query){
+             echo('success');
+         }
+ 
+     }
     if(isset($_POST['addnote'])){
         $content=$_POST['note'];
         $author=$_SESSION['userdata']['id'];
@@ -223,4 +234,35 @@
         }
         die();
       }
+    if(isset($_GET['getDocumentOCR'])) {
+        $query=$conn->query("SELECT * FROM files WHERE ocrscan=''");
+        $documentOCR=array();
+        while($row=$query->fetch_object()){
+            $documentOCR[]=$row;
+            }
+        echo json_encode($documentOCR);
+    }
+    if(isset($_POST['ocrResult'])){
+        $id = $_POST['id'];
+        $result = $_POST['ocrResult'];
+        echo($result);
+        $query=$conn->query("UPDATE `files` SET `ocrscan`='$result' WHERE id='$id'");
+        trigger_error($conn->error);
+        if($query){
+            echo("SUCCESS");
+        }
+    }
+    if(isset($_GET['logOut'])){
+        session_unset($_SESSION["userdata"]); 
+        header("location:index.php");
+        session_destroy();
+    }
+    if(isset($_GET['getRecycleBin'])){
+        $query=$conn->query("SELECT * FROM files WHERE status='recycle_bin'");
+        $recycleBin=array();
+        while($row=$query->fetch_object()){
+            $recycleBin[]=$row;
+            }
+        echo json_encode($recycleBin);
+    }
 ?>

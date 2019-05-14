@@ -11,9 +11,7 @@
                     <?php session_start();
                           print_r($_SESSION['userdata']['username']) ?></a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item" href="#">Manage Account</a>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#">Logout</a>
+                <a class="dropdown-item logOut" href="#">Logout</a>
               </div>
             </li>
             </ul>
@@ -32,8 +30,7 @@
         <a class="nav-link"  onclick="addNote();" href="#"><i class="fa fa-sticky-note-o navlink"></i><span class="sr-only">(current)</span></a>
     </li>
     <li class="nav-item navbtn">
-        <a class="nav-link" href="#" data-toggle="modal" data-target=".bd-example-modal-lg"><i class="fa fa-cog navlink"></i><span class="sr-only">(current)</span></a>
-        <?php include("inc/settingsModal.html") ?>    
+        <a class="nav-link" href="#" data-toggle="modal" data-target=".bd-example-modal-lg"><i class="fa fa-cog navlink"></i><span class="sr-only">(current)</span></a>   
       </li>
     </ul>
 
@@ -43,11 +40,5 @@
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-  
-    <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
-            <form class="form-inline my-2 my-lg-0">
-                    <input class="form-control mr-sm-2" id="searchIDocumentInput" type="search" onkeyup="searchDocument();" placeholder="Search">
-                  </form>
-</div>
   </nav>
   

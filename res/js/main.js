@@ -148,38 +148,30 @@ $(document).ready(function(){
         }
     $(document).ready(function(){
         $('.content-main').on('click','#customView',function(){
-            var view = $("input[name='customView']:checked").val()
-            if(view=="listview"){
-                $('#breadCrumb').append("ListView");
+            var view = $("input[name='customView']:checked").val();
+            if(view=="listView"){
+                $('.listGridView').html("<li class='listView'><i class='fa fa-file-o'></i>document.jpeg</li>");
             }
-            else if(view=="gridview"){
-                $('#breadCrumb').append("GridView");
+            else if(view=="gridView"){
+                $('.listGridView').html("<div class='col-lg-2 gridFileView'><i class='fa fa-file-o fileCustomView'></i><br>documentFile.jpeg</div>");
             }
         });
     }); 
-       function directoryAction(){
-           var directory=$('#folderCategory').val();
-           $(".content-main").html("<div class='searchForm'><div class='form-check form-check-inline'>"+
+    $(document).ready(function(){
+        $(".content-main").html("<input type='hidden' id='folderCategory'><div class='searchForm'><div class='form-check form-check-inline'>"+
            "<label class='form-check-label'>"+
-             "<input class='form-check-input' type='radio' name='customView' id='customView' value='listView'> List View </label> </div>"+
+             "<input class='form-check-input' type='radio' name='customView' id='customView' value='listView' checked> List View </label> </div>"+
              "<div class='form-check form-check-inline'>"+
            "<label class='form-check-label'>"+
              "<input class='form-check-input' type='radio' name='customView' id='customView' value='gridView'> Grid View </label></div>"+
-             "<form class='form-inline my-2 my-lg-3 searchInput'>"+
+             "<form class='form-inline my-2 my-lg-0 searchInput'>"+
              "<input class='form-control mr-sm-2' id='searchIDocumentInput' type='search' onkeyup='searchDocument();' placeholder='Search Document...'>"+
-           "</form></div><div id='breadCrumb'></div>");           
-           $(".content-main").append("<div class='tableFixHead id='style-1'><table class='record_table'>"+
-           "<thead>"+
-           "<tr class='tblHeading'>"+
-           "<th align='center' style='padding-bottom:10px'><input type='checkbox' class='form-control checkbox-round'/></th>"+
-           "<th></th>"+
-           "<th>File Name</th>"+
-           "<th>File Size</th>"+
-           "<th>Uploader</th>"+
-           "<th>Date Modefied</th>"+
-             "</tr>"+
-             "</thead>"+
-             "<tbody class='fileTbody'></tbody></table></div>");
+           "</form></div><div id='breadCrumb'></div><hr><div class='container'><div class='row listGridView'></div></div>");   
+    });
+       function directoryAction(){
+           var directory=$('#folderCategory').val();  
+           var view = $("input[name='customView']:checked").val();   
+           $(".content-main").append("");
             var dataString = "directory=" + directory + "&getFileInDirectory="
              $.ajax({
                 url: "main.php",

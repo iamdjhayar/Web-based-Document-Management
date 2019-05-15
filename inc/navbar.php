@@ -18,19 +18,19 @@
       </div>
 <ul class="navbar-nav">
   <li class="nav-item navbtn">
-          <a class="nav-link" href="home.php"><i class="fa fa-home navlink"></i><span class="sr-only">(current)</span></a>
+          <a class="nav-link" href="home.php" title="Home-Document Management"><i class="fa fa-home navlink"></i><span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item navbtn">
-        <a class="nav-link" href="#"><i class="fa fa-envelope-o navlink"></i><span class="sr-only">(current)</span></a>
+        <a class="nav-link" href="#" title="Message"><i class="fa fa-envelope-o navlink"></i><span class="sr-only">(current)</span></a>
     </li>
       <li class="nav-item navbtn">
-        <a class="nav-link" href="#"><i class="fa fa-bell-o navlink"></i><span class="sr-only">(current)</span></a>
+        <a class="nav-link" href="#" title="Notifications"><i class="fa fa-bell-o navlink"></i><span class="sr-only">(current)</span></a>
     </li>
       <li class="nav-item navbtn">
-        <a class="nav-link"  onclick="addNote();" href="#"><i class="fa fa-sticky-note-o navlink"></i><span class="sr-only">(current)</span></a>
+        <a class="nav-link"  onclick="addNote();" href="#" title="Add Note"><i class="fa fa-sticky-note-o navlink"></i><span class="sr-only">(current)</span></a>
     </li>
     <li class="nav-item navbtn">
-        <a class="nav-link" href="#" data-toggle="modal" data-target=".bd-example-modal-lg"><i class="fa fa-cog navlink"></i><span class="sr-only">(current)</span></a>   
+        <a class="nav-link" href="#" data-toggle="modal" title="Settings" data-target=".bd-example-modal-lg"><i class="fa fa-cog navlink"></i><span class="sr-only">(current)</span></a>   
       </li>
     </ul>
 

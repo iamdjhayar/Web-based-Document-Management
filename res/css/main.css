@@ -624,7 +624,7 @@ textarea{
       font-size: 20px;
   }
   /*scrollable table*/
-.tableFixHead    { overflow-y: auto; height: 80%; }
+.tableFixHead    { overflow-y: auto; height: 80%; width:100%}
 .tableFixHead th { position: sticky; top: 0; }
 table .record_table  { border-collapse: collapse; width: 100%; }
 th, td { padding: 8px 16px; }
@@ -684,9 +684,18 @@ th     { background:#eee; }
     align-content: center;
     align-items: center;
     text-align: center;
+    cursor: pointer;
+
+    white-space: nowrap; 
+    width: 50px; 
+    overflow: hidden;
+    text-overflow: clip; 
 }
 .listView{
     
+}
+.listGridView{
+    width:100%;
 }
 #test{
     position:absolute; 

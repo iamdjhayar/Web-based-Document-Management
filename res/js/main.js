@@ -82,9 +82,7 @@ $(document).ready(function(){
                 });
 
             }
-            }
-            
-            
+            }   
         }
         function removeDocument(obj){
             var fileIdRemove = obj.value;
@@ -147,13 +145,13 @@ $(document).ready(function(){
           "</form></div><div id='breadCrumb'></div><hr>");
         }
     $(document).ready(function(){
-        $('.content-main').on('click','#customView',function(){
+        $('.content-main').on('change','#customView',function(){
             var view = $("input[name='customView']:checked").val();
             if(view=="listView"){
-                $('.listGridView').html("<li class='listView'><i class='fa fa-file-o'></i>document.jpeg</li>");
+                listView();
             }
             else if(view=="gridView"){
-                $('.listGridView').html("<div class='col-lg-2 gridFileView'><i class='fa fa-file-o fileCustomView'></i><br>documentFile.jpeg</div>");
+                gridView();
             }
         });
     }); 
@@ -169,11 +167,39 @@ $(document).ready(function(){
            "</form></div><div id='breadCrumb'></div><hr><div class='container'><div class='row listGridView'></div></div>");   
     });
        function directoryAction(){
-           var directory=$('#folderCategory').val();  
-           var view = $("input[name='customView']:checked").val();   
-           $(".content-main").append("");
+           
+           var view = $("input[name='customView']:checked").val(); 
+           if(view=="listView"){
+                listView();
+                    }
+                else if(view=="gridView"){
+                    gridView();
+                }
+            }
+             $(document).ready(function(){
+                $('.content-main').on('click','.renameFile', function(event) {
+                    event.preventDefault();
+                    alert("sjdhfjdf");
+                });
+            });
+       
+       function listView(){
+        var directory=$('#folderCategory').val();  
+        $(".listGridView").html("<div class='tableFixHead id='style-1'><table class='record_table'>"+
+        "<thead>"+
+        "<tr class='tblHeading'>"+
+        "<th align='center' style='padding-bottom:10px'><input type='checkbox' class='form-control checkbox-round'/></th>"+
+        "<th></th>"+
+        "<th>File Name</th>"+
+        "<th>File Size</th>"+
+        "<th>Uploader</th>"+
+        "<th>Date Modefied</th>"+
+            "</tr>"+
+            "</thead>"+
+            "<tbody class='fileTbody'></tbody></table></div>");  
+        $(".content-main").append("");
             var dataString = "directory=" + directory + "&getFileInDirectory="
-             $.ajax({
+            $.ajax({
                 url: "main.php",
                 type: "GET",
                 data: dataString,
@@ -204,15 +230,36 @@ $(document).ready(function(){
                     });
                 }
                 
-             });
-             $(document).ready(function(){
-                $('.content-main').on('click','.renameFile', function(event) {
-                    event.preventDefault();
-                    alert("sjdhfjdf");
-                });
             });
        }
-       
+       function gridView(){
+        var directory=$('#folderCategory').val();  
+        $('.listGridView').html("");
+            var dataString = "directory=" + directory + "&getFileInDirectory=";
+            $.ajax({
+                url: "main.php",
+                type: "GET",
+                data: dataString,
+                dataType: "json",
+                contentType: false,
+                cache: false,
+                processData: false,
+                success:function(data){
+                    var id = 0;
+                    $.each(data,function(i,element){
+                        var fName = element.namef;
+                        var uploader = element.uploader;
+                        var datestamp = element.datestamp;
+                        var fileId = element.id;
+                        var size = element.size;
+                        size = size+"MB";
+                        
+                        $('.listGridView').append("<div class='col-lg-2 gridFileView' id='"+ fileId +"'><i class='fa fa-file-o fileCustomView'></i><br>"+ fName +"</div>");
+                    });
+                }
+                
+            });
+       }
        function clickRow(event){
            if(event.target.type !== 'checkbox'){
             alert('asjdgs');
@@ -225,7 +272,6 @@ $(document).ready(function(){
             $('#properties').css('display','block'); 
             var id = this.id;
             var fileId = $('#file'+id).val();
-            console.log(fileId);
             var dataString = "fileId=" + fileId + "&displayFileProperty=";
             $.ajax({
                 url: "main.php",
@@ -275,6 +321,63 @@ $(document).ready(function(){
             
        });
     });
+//end of function oreview///////
+//function for displaying preview of the document//
+$(document).ready(function(){
+    $('.listGridView').on('click','.gridFileView',function(event) {
+        $('.rightnav').html("<div id='properties'></div>");
+        $('#properties').css('display','block'); 
+        var id = this.id;
+        console.log(id);
+        var dataString = "fileId=" + id + "&displayFileProperty=";
+        $.ajax({
+            url: "main.php",
+            type: "GET",
+            data: dataString,
+            dataType: "json",
+            contentType: false,
+            cache: false,
+            processData: false,
+            success:function(data){
+                $.each(data,function(i,file){
+                    var filename = file.namef;
+                    var location = file.location;
+                    var extension = filename.substr( (filename.lastIndexOf('.') +1) );
+                    var uploader = file.uploader;
+                    //$('#properties').html("<a class='nav-link docPropBtn' href='#' onclick='maxDoc();'><i class='fa fa-expand'></i></a>");
+                    switch(extension) {
+                        case 'jpg':
+                        case 'png':
+                        case 'gif':
+                            $('#properties').append("<a href='document_preview.php?location=./My Files/"+ filename +"' target='_blank'><img src='./My Files/"+ filename +"' width='100%'/></a>");
+                        break;                        
+                        case 'zip':
+                        case 'rar':
+                            $('#properties').append("<div class='file-preview'><i class='fa fa-file-zip-o'</div>");
+                        break;
+                        case 'pdf':
+                            $('#properties').append("<object scrolling='no' data='./My Files/"+filename+"' type='application/pdf'>"+
+                                "<embed scrolling='no' src='./My Files/"+filename+"' type='application/pdf'/>"+
+                            "</object>");
+                        break;
+                        case 'docx':
+                        case 'doc':
+                            $('#properties').append("<div class='file-preview'><i class='fa fa-file-word-o'></i></div>");
+                        break;
+                        default:
+                            $('#properties').append("<div class='file-preview'><i class='fa fa-ban'></i></div>");
+                    }
+                    
+                    $('#properties').append("<table class='file-property'><tr><td>File Name:</td><td>"+filename+"</td></tr>"+
+                            "<tr><td>Location:</td><td>"+location+"</td></tr>"+
+                            "<tr><td>Uploader:</td><td>"+uploader+"</td></tr></table>");
+                });                
+        }
+
+        });
+        
+   });
+});
 //end of function oreview///////
 
 //function trigger when checkbox is checked

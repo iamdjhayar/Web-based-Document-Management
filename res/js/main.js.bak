@@ -754,7 +754,7 @@ $(document).ready(function(){
     (function worker() {
         var dataString = "getDocumentOCR="; 
         $.ajax({
-            url: "./main.php",   	
+            url: "/main.php",   	
             type: "GET",      				
             data:  dataString, 			
             dataType: "json",						

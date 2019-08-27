@@ -109,7 +109,7 @@
     }
     if(isset($_GET['getFileInDirectory'])){
         $directory=$_GET['directory'];
-        $query=$conn->query("SELECT * FROM files WHERE location='$directory' AND status='active'") or die($conn->error());
+        $query=$conn->query("SELECT * FROM files WHERE location='$directory' AND status='active'");
         $file_in_directory=array();
         while($row=$query->fetch_object()){
             $file_in_directory[]=$row;
